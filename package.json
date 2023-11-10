@@ -1,0 +1,20 @@
+{
+  "name": "ReactPipelines",
+  "version": "0.0.1",
+  "private": true,
+  "description": "A component for building graphical representations of data pipelines",
+  "author": "Kristofer Jarl <kristofer.jarl@trollmoj.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently \"yarn workspace react-pipelines build --watch\" \"yarn workspace pipelinesite vite\""
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "sites/*"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
