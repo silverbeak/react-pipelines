@@ -3,17 +3,20 @@ import BaseBlock from './BaseBlock'
 import { usePipelineDrag } from '../hooks/usePipelineDrag'
 import { ErrorOutputConnectionPoint, OutputConnectionPoint } from '../connections/ConnectionPoint'
 import { DragConnectionLineProps } from '../utils/BlockParser'
+import { TransformData } from '../utils/BlockUtils'
 
 interface StartBlockProps {
   id: string
   children?: React.ReactNode
   draggable?: string
-  x?: number
-  y?: number
+  transformData: TransformData
 }
 
 const StartBlock = (props: StartBlockProps & DragConnectionLineProps) => {
-  const { transformData, onDragStart, onDragEnd } = usePipelineDrag(props.x, props.y)
+  const { transformData, onDragStart, onDragEnd } = usePipelineDrag(
+    props.transformData.translateX,
+    props.transformData.translateY,
+  )
 
   return (
     <BaseBlock

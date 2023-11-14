@@ -8,6 +8,7 @@ export interface DragConnectionLineProps {
   onConnectionLineDraw: (event: React.DragEvent<HTMLDivElement>) => void
   onConnectionLineDrag: (event: React.DragEvent<HTMLDivElement>) => void
   onConnectionLineDragEnd: (event: React.DragEvent<HTMLDivElement>) => void
+  onConnectionLineDrop: (event: React.DragEvent<HTMLDivElement>) => void
 }
 
 function parseBlockData(input: BlockData, connectionLinesProps: DragConnectionLineProps): React.ReactElement {
@@ -15,7 +16,7 @@ function parseBlockData(input: BlockData, connectionLinesProps: DragConnectionLi
     case 'start':
       return <StartBlock {...input} {...connectionLinesProps} />
     case 'mid':
-      return <MidBlock {...input} />
+      return <MidBlock {...input} {...connectionLinesProps} />
     default:
       return <BaseBlock {...input} />
   }

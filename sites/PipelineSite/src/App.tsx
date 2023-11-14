@@ -4,7 +4,6 @@ import './App.css'
 import { FlowBoard } from 'react-pipelines'
 
 function App() {
-
   return (
     <>
       <div>
@@ -23,16 +22,20 @@ function App() {
             id: 'start-block1',
             blockType: 'start',
             draggable: 'true',
-            x: 100,
-            y: 100,
+            transformData: {
+              translateX: 100,
+              translateY: 100,
+            },
           },
           {
-            key: 'start-block2',
-            id: 'start-block2',
+            key: 'mid-block',
+            id: 'mid-block',
             blockType: 'mid',
             draggable: 'true',
-            x: 700,
-            y: 700,
+            transformData: {
+              translateX: 400,
+              translateY: 300,
+            },
           },
         ]}
       />

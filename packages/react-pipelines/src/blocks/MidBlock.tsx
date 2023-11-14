@@ -7,24 +7,21 @@ import {
   InputConnectionPoint,
   OutputConnectionPoint,
 } from '../connections/ConnectionPoint'
+import { DragConnectionLineProps } from '../utils/BlockParser'
+import { TransformData } from '../utils/BlockUtils'
 
 interface MidBlockProps {
   id: string
   children?: React.ReactNode
   draggable?: string
-  x?: number
-  y?: number
+  transformData: TransformData
 }
 
-const onConnectionLineDrop = (event: React.DragEvent<HTMLDivElement>) => {
-  console.log('onConnectionLineDrop', event.currentTarget.id)
-  console.log('onConnectionLineDrop', event.dataTransfer.getData('text/plain'))
-  event.stopPropagation()
-  event.preventDefault()
-}
-
-const MidBlock = (props: MidBlockProps) => {
-  const { transformData, onDragStart, onDragEnd } = usePipelineDrag(props.x, props.y)
+const MidBlock = (props: MidBlockProps & DragConnectionLineProps) => {
+  const { transformData, onDragStart, onDragEnd } = usePipelineDrag(
+    props.transformData.translateX,
+    props.transformData.translateY,
+  )
 
   return (
     <BaseBlock
@@ -37,10 +34,7 @@ const MidBlock = (props: MidBlockProps) => {
     >
       <OutputConnectionPoint id={`${props.id}-connection-point`} />
       <ErrorOutputConnectionPoint id={`${props.id}-error-connection-point`} />
-      <InputConnectionPoint
-        onDrop={onConnectionLineDrop}
-        id={`${props.id}-input-connection-point`}
-       />
+      <InputConnectionPoint onDrop={props.onConnectionLineDrop} id={`${props.id}-input-connection-point`} />
       <ErrorInputConnectionPoint id={`${props.id}-error-input-connection-point`} />
       {props.children}
       This is a MidBlock

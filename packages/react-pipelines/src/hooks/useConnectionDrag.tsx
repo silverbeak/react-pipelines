@@ -10,21 +10,20 @@ const useConnectionDrag = (blockData: BlockData[]) => {
 
   const calculatePosition = (event: React.DragEvent<HTMLDivElement>, baseX: number, baseY: number) => {
     const originConnection = event.currentTarget
-    const parentBlock = originConnection.parentElement!
-    const parentTransform = parentBlock.computedStyleMap().get('transform')?.toString()
-    const matrix = new WebKitCSSMatrix(parentTransform)
+    const parentBlock = blockData.find((block) => block.id === originConnection.parentElement?.id)!
+    const {translateX, translateY} = parentBlock.transformData || {translateX: 0, translateY: 0}
 
     const x1 =
       baseX -
       (originConnection.offsetParent?.getBoundingClientRect().x || 0) +
       originConnection.offsetHeight / 2 +
-      matrix.m41
+      translateX!
 
     const y1 =
       baseY -
       (originConnection.offsetParent?.getBoundingClientRect().y || 0) +
       originConnection.offsetHeight / 2 +
-      matrix.m42
+      translateY!
 
     return { x1, y1 }
   }
@@ -46,21 +45,18 @@ const useConnectionDrag = (blockData: BlockData[]) => {
   }
 
   const onOutputConnectionPointDragStart = (event: React.DragEvent<HTMLDivElement>) => {
-    event.stopPropagation()
+    event.dataTransfer.setData('originConnectionPoint', event.currentTarget.id)
     const { x1, y1, x2, y2 } = calculateOriginPosition(event)
-    const connectionLine: ConnectionSvgLineProps = { x1: x1, y1: y1, x2: x2, y2: y2, key: currentLineId.toString() }
+    const connectionLine = { x1: x1, y1: y1, x2: x2, y2: y2, key: currentLineId.toString() }
     setConnectionLines([...connectionLines, connectionLine])
     setCurrentConnectionLine(connectionLine)
   }
 
   const onOutputConnectionPointDrag = (event: React.DragEvent<HTMLDivElement>) => {
-    event.stopPropagation()
-    event.preventDefault()
-
     if (currentConnectionLine) {
       const { x2, y2 } = calculateUpdatedPosition(event)
       const { x1, y1 } = currentConnectionLine
-      const newConnectionLine: ConnectionSvgLineProps = {
+      const newConnectionLine = {
         x1: x1,
         y1: y1,
         x2: x2,
@@ -76,12 +72,18 @@ const useConnectionDrag = (blockData: BlockData[]) => {
   }
 
   const onOutputConnectionPointDragEnd = (event: React.DragEvent<HTMLDivElement>) => {
-    console.log('onOutputConnectionPointDragEnd', event.currentTarget)
     event.stopPropagation()
-    event.preventDefault()
 
     setCurrentConnectionLine(null)
     setCurrentLineId(currentLineId + 1)
+  }
+
+  const onInputConnectionLineDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    console.log('onConnectionLineDrop', event.currentTarget.id)
+    console.log('onConnectionLineDrop', event.dataTransfer.getData('originConnectionPoint'))
+    // TODO: This is where we need to create a connection and save it somehow
+    // event.stopPropagation()
+    // event.preventDefault()
   }
 
   const blocks = blockData?.map((block) =>
@@ -89,6 +91,7 @@ const useConnectionDrag = (blockData: BlockData[]) => {
       onConnectionLineDraw: onOutputConnectionPointDragStart,
       onConnectionLineDrag: onOutputConnectionPointDrag,
       onConnectionLineDragEnd: onOutputConnectionPointDragEnd,
+      onConnectionLineDrop: onInputConnectionLineDrop,
     }),
   )
 
