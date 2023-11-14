@@ -11,7 +11,7 @@ const useConnectionDrag = (blockData: BlockData[]) => {
   const calculatePosition = (event: React.DragEvent<HTMLDivElement>, baseX: number, baseY: number) => {
     const originConnection = event.currentTarget
     const parentBlock = blockData.find((block) => block.id === originConnection.parentElement?.id)!
-    const {translateX, translateY} = parentBlock.transformData || {translateX: 0, translateY: 0}
+    const { translateX, translateY } = parentBlock.transformData || { translateX: 0, translateY: 0 }
 
     const x1 =
       baseX -
@@ -74,16 +74,32 @@ const useConnectionDrag = (blockData: BlockData[]) => {
   const onOutputConnectionPointDragEnd = (event: React.DragEvent<HTMLDivElement>) => {
     event.stopPropagation()
 
-    setCurrentConnectionLine(null)
+    // Remove the current connection line. If it is not dropped on an input connection point, it will be removed
+    // If it is dropped on an input connection point, it will be saved in the onInputConnectionLineDrop function
+    setConnectionLines((lines) => lines.filter((line) => line.key !== currentLineId.toString()))
+        setCurrentConnectionLine(null)
     setCurrentLineId(currentLineId + 1)
   }
 
   const onInputConnectionLineDrop = (event: React.DragEvent<HTMLDivElement>) => {
     console.log('onConnectionLineDrop', event.currentTarget.id)
     console.log('onConnectionLineDrop', event.dataTransfer.getData('originConnectionPoint'))
-    // TODO: This is where we need to create a connection and save it somehow
-    // event.stopPropagation()
-    // event.preventDefault()
+    // Find current connection line from connectionLines
+    const currentConnectionLine = connectionLines.find(
+      (connectionLine) => connectionLine.key === currentLineId.toString(),
+    )!
+
+    // Create a new key for the connection line
+    // TODO: Investigate if this is the best key to use.
+    const newKey = `${event.dataTransfer.getData('originConnectionPoint')}#${event.currentTarget.id}`
+    
+    // Create a copy, but with a new key
+    const newLineToBeSaved = Object.assign({}, currentConnectionLine, { key: newKey })
+
+    // "Save" the new connection line to the connectionLines array
+    setConnectionLines([newLineToBeSaved, ...connectionLines])
+
+    // TODO: Prevent collision with other connection lines. If there is a collision, remove the new connection line
   }
 
   const blocks = blockData?.map((block) =>
