@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { BlockData } from './utils/BlockUtils'
-import { parseBlockData } from './utils/BlockParser'
+import { ConnectionCanvas } from './connections/ConnectionLine'
+import useConnectionDrag from './hooks/useConnectionDrag'
 
 interface FlowBoardProps {
   id: string
@@ -27,16 +28,14 @@ const dropStuff = (event: React.DragEvent<HTMLDivElement>) => {
 }
 
 const FlowBoard = (props: FlowBoardProps) => {
-  const blocks = props.blockData?.map((block) => parseBlockData(block))
+  const { blocks, connectionLines } = useConnectionDrag(props.blockData)
 
-  return <Board
-    id={props.id}
-    className='flow-board'
-    onDragOver={dragStuff}
-    onDrop={dropStuff}
-  >
+  return (
+    <Board id={props.id} className="flow-board" onDragOver={dragStuff} onDrop={dropStuff}>
       {blocks}
-   </Board>
+      <ConnectionCanvas key="connection-canvas" lines={connectionLines} />
+    </Board>
+  )
 }
 
 export default FlowBoard

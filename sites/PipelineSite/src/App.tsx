@@ -29,10 +29,10 @@ function App() {
           {
             key: 'start-block2',
             id: 'start-block2',
-            blockType: 'start',
+            blockType: 'mid',
             draggable: 'true',
-            x: 300,
-            y: 300,
+            x: 700,
+            y: 700,
           },
         ]}
       />

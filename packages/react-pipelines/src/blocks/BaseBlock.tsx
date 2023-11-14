@@ -17,13 +17,12 @@ const BaseBlock = styled.div<{ $transformData?: TransformData }>`
   border-radius: 2px;
   border: 1px solid #eee;
   padding: 10px;
-  margin: 0;
+  // margin: 10px;
   width: 200px;
   height: 100px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+  z-index: 1;
 `
 
 export default BaseBlock
