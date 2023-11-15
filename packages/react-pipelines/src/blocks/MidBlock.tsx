@@ -32,10 +32,10 @@ const MidBlock = (props: MidBlockProps & DragConnectionLineProps) => {
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
     >
-      <OutputConnectionPoint id={`${props.id}-connection-point`} />
-      <ErrorOutputConnectionPoint id={`${props.id}-error-connection-point`} />
-      <InputConnectionPoint onDrop={props.onConnectionLineDrop} id={`${props.id}-input-connection-point`} />
-      <ErrorInputConnectionPoint id={`${props.id}-error-input-connection-point`} />
+      <OutputConnectionPoint id={`${props.id}-output`} />
+      <ErrorOutputConnectionPoint id={`${props.id}-erroroutput`} />
+      <InputConnectionPoint onDrop={props.onConnectionLineDrop} id={`${props.id}-input`} />
+      <ErrorInputConnectionPoint id={`${props.id}-errorinput`} />
       {props.children}
       This is a MidBlock
     </BaseBlock>

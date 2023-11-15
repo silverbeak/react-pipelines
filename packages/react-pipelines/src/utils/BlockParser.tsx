@@ -5,7 +5,7 @@ import StartBlock from '../blocks/StartBlock'
 import MidBlock from '../blocks/MidBlock'
 
 export interface DragConnectionLineProps {
-  onConnectionLineDraw: (event: React.DragEvent<HTMLDivElement>) => void
+  onConnectionLineDragStart: (event: React.DragEvent<HTMLDivElement>) => void
   onConnectionLineDrag: (event: React.DragEvent<HTMLDivElement>) => void
   onConnectionLineDragEnd: (event: React.DragEvent<HTMLDivElement>) => void
   onConnectionLineDrop: (event: React.DragEvent<HTMLDivElement>) => void

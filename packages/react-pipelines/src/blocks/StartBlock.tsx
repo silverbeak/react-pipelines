@@ -28,13 +28,19 @@ const StartBlock = (props: StartBlockProps & DragConnectionLineProps) => {
       onDragEnd={onDragEnd}
     >
       <OutputConnectionPoint
-        id={`${props.id}-connection-point`}
+        id={`${props.id}-output`}
         draggable="true"
-        onDragStart={props.onConnectionLineDraw}
+        onDragStart={props.onConnectionLineDragStart}
         onDrag={props.onConnectionLineDrag}
         onDragEnd={props.onConnectionLineDragEnd}
       />
-      <ErrorOutputConnectionPoint id={`${props.id}-error-connection-point`} />
+      <ErrorOutputConnectionPoint 
+        id={`${props.id}-erroroutput`} 
+        draggable="true"
+        onDragStart={props.onConnectionLineDragStart}
+        onDrag={props.onConnectionLineDrag}
+        onDragEnd={props.onConnectionLineDragEnd}
+      />
       {props.children}
       This is a StartBlock
     </BaseBlock>

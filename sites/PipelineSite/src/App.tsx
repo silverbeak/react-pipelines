@@ -18,8 +18,8 @@ function App() {
         id="main-flow-board"
         blockData={[
           {
-            key: 'start-block1',
-            id: 'start-block1',
+            key: 'startblock1',
+            id: 'startblock1',
             blockType: 'start',
             draggable: 'true',
             transformData: {
@@ -28,16 +28,24 @@ function App() {
             },
           },
           {
-            key: 'mid-block',
-            id: 'mid-block',
+            key: 'midblock1',
+            id: 'midblock1',
             blockType: 'mid',
             draggable: 'true',
             transformData: {
-              translateX: 400,
-              translateY: 300,
+              translateX: 500,
+              translateY: 150,
             },
           },
         ]}
+        connectionLineData={[{
+          key: 'startblock1-erroroutput#midblock1-errorinput',
+          id: 'startblock1-erroroutput#midblock1-errorinput',
+          originBlockId: 'startblock1',
+          originConnectionPointId: 'startblock1-erroroutput',
+          destinationBlockId: 'midblock1',
+          destinationConnectionPointId: 'midblock1-errorinput',
+        }]}
       />
       <div className="card">
         <p>

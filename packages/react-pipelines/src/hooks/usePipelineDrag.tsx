@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-export function usePipelineDrag(startX?: number, startY?: number) {
-  const [x, setX] = React.useState(startX || 0)
-  const [y, setY] = React.useState(startY || 0)
+export function usePipelineDrag(startX: number = 0, startY: number = 0) {
+  const [x, setX] = React.useState(startX)
+  const [y, setY] = React.useState(startY)
 
   const transformData = {
     translateX: x,
@@ -13,11 +13,18 @@ export function usePipelineDrag(startX?: number, startY?: number) {
   const [originY, setOriginY] = React.useState(0)
 
   const onDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+    event.dataTransfer.setData('movedBlockId', event.currentTarget.id)
+    event.dataTransfer.setData('originX', (x - event.clientX).toString())
+    event.dataTransfer.setData('originY', (y - event.clientY).toString())
     setOriginX(event.clientX)
     setOriginY(event.clientY)
   }
 
   const onDragEnd = (event: React.DragEvent<HTMLDivElement>) => {
+    // This is not a favourite of mine. Is there a better way to find out if this is a connection drag?
+    const target = event.target as HTMLElement
+    const isConnectionElement = target.id.includes('output') || target.id.includes('input')
+
     // This is basically reverse collision detection. If we drop the block outside the designated area, we reset the position.
     const parentRect = event.currentTarget.parentElement?.getClientRects()[0]
 
@@ -32,7 +39,7 @@ export function usePipelineDrag(startX?: number, startY?: number) {
       event.clientY > upperBound &&
       event.clientY < lowerBound
 
-    if (insideBounds) {
+    if (insideBounds && !isConnectionElement) {
       // console.log('insideBounds', insideBounds, event.currentTarget.id)
       const newX = event.clientX - originX + x
       const newY = event.clientY - originY + y

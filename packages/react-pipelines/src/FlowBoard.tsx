@@ -2,10 +2,13 @@ import styled from 'styled-components'
 import { BlockData } from './utils/BlockUtils'
 import { ConnectionCanvas } from './connections/ConnectionLine'
 import useConnectionDrag from './hooks/useConnectionDrag'
+import { useState } from 'react'
+import { ConnectionLineData } from './utils/ConnectionUtils'
 
 interface FlowBoardProps {
   id: string
   blockData: BlockData[]
+  connectionLineData: ConnectionLineData[]
 }
 
 const Board = styled.div`
@@ -17,18 +20,38 @@ const Board = styled.div`
   height: 90vh;
 `
 
-const dragStuff = (event: React.DragEvent<HTMLDivElement>) => {
-  // console.log('dragStuff', event.clientX, event.clientY)
-  event.preventDefault()
-}
-
-const dropStuff = (event: React.DragEvent<HTMLDivElement>) => {
-  // console.log('dropStuff', event.clientX, event.clientY)
-  event.preventDefault()
-}
-
 const FlowBoard = (props: FlowBoardProps) => {
-  const { blocks, connectionLines } = useConnectionDrag(props.blockData)
+  const [blockData, setBlockData] = useState<BlockData[]>(props.blockData)
+
+  const { blocks, connectionLines } = useConnectionDrag(blockData, props.connectionLineData)
+
+  const dragStuff = (event: React.DragEvent<HTMLDivElement>) => {
+    // console.log('dragStuff', event.clientX, event.clientY)
+    event.preventDefault()
+  }
+
+  const dropStuff = (event: React.DragEvent<HTMLDivElement>) => {
+    const movedBlockId = event.dataTransfer.getData('movedBlockId')
+    const originalX = event.dataTransfer.getData('originX')
+    const originalY = event.dataTransfer.getData('originY')
+    console.log('dropStuff', movedBlockId, originalX, originalY)
+    setBlockData((blocks) =>
+      blocks.map((block) => {
+        if (block.id === movedBlockId) {
+          const newX = event.clientX + parseInt(originalX)
+          const newY = event.clientY + parseInt(originalY)
+          return {
+            ...block,
+            transformData: {
+              translateX: newX,
+              translateY: newY,
+            },
+          }
+        }
+        return block
+      }),
+    )
+  }
 
   return (
     <Board id={props.id} className="flow-board" onDragOver={dragStuff} onDrop={dropStuff}>
