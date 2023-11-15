@@ -32,19 +32,9 @@ const useConnectionDrag = (
 
   const onOutputConnectionPointDrag = (event: React.DragEvent<HTMLDivElement>) => {
     event.stopPropagation()
-    // event.dataTransfer.setData('ConnectionPoint', event.currentTarget.id)
-    const originConnectionPointId = event.currentTarget.id
-    const originParentBlock = blockData.find((block) => block.id === originConnectionPointId.split('-')[0])!
     if (currentConnectionLine) {
       const { x2, y2 } = { x2: event.clientX - offsetX, y2: event.clientY - offsetY }
-      const newConnectionLine: TemporaryConnectionLineData = {
-        key: 'xxx',
-        id: 'xxx',
-        originBlockId: originParentBlock.id,
-        originConnectionPointId,
-        x: x2,
-        y: y2,
-      }
+      const newConnectionLine = Object.assign({}, currentConnectionLine, { x: x2, y: y2 })
       // Filter out old connection line
       const filteredConnectionLines = connectionLinesData.filter((connectionLine) => connectionLine.key !== 'xxx')
       setConnectionLines([...filteredConnectionLines, newConnectionLine])
@@ -52,9 +42,7 @@ const useConnectionDrag = (
     }
   }
 
-  const onOutputConnectionPointDragEnd = (event: React.DragEvent<HTMLDivElement>) => {
-    // event.preventDefault()
-    event.dataTransfer.getData('ConnectionPoint')
+  const onOutputConnectionPointDragEnd = () => {
     // Remove the current connection line. If it is not dropped on an input connection point, it will be removed
     // If it is dropped on an input connection point, it will be saved in the onInputConnectionLineDrop function
     setConnectionLines((lines) => lines.filter((line) => line.key !== 'xxx'))
@@ -62,33 +50,25 @@ const useConnectionDrag = (
   }
 
   const onInputConnectionLineDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    // Create a new key for the connection line
-    // TODO: Investigate if this is the best key to use.
+    // Create a new key for the connection line. We can't know the full key until we know the target connection point
     const newKey = `${event.dataTransfer.getData('originConnectionPoint')}#${event.currentTarget.id}`
 
-    const originConnectionPointId = event.dataTransfer.getData('originConnectionPoint')
-    const originParentBlock = blockData.find((block) => block.id === originConnectionPointId.split('-')[0])!
     const targetParentBlock = blockData.find((block) => block.id === event.currentTarget.parentElement?.id)!
 
     // Convert to ConnectionLineData
-    const connectionLineData: ConnectionLineData = {
+    const newConnectionLineData = Object.assign({}, currentConnectionLine, {
       id: newKey,
       key: newKey,
-      originBlockId: originParentBlock.id, // TODO: This is not right!
-      originConnectionPointId: originConnectionPointId,
       destinationBlockId: targetParentBlock.id,
       destinationConnectionPointId: event.currentTarget.id,
-    }
+    })
 
     // Add to connection line data
     setConnectionLines((lines) => {
-      // Remove line from lines, and replace it with our new line
       const filteredLines = lines.filter((line) => line.key !== 'xxx')
-      const newLines = [...filteredLines, connectionLineData]
+      const newLines = [...filteredLines, newConnectionLineData]
       return newLines
     })
-
-    // TODO: Prevent collision with other connection lines. If there is a collision, remove the new connection line
   }
 
   useEffect(() => {
