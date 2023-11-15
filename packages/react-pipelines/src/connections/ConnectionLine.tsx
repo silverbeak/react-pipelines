@@ -20,11 +20,18 @@ const StyledSvgContainer = styled.svg`
 const StyledSvgLine = styled.line`
   position: absolute;
   stroke-width: 2px;
-  marker-end: url(#arrowhead);
   &:hover {
     stroke: red;
   }
 `
+
+// const StyledSvgPath = styled.path`
+//   position: absolute;
+//   stroke-width: 2px;
+//   &:hover {
+//     stroke: red;
+//   }
+// `
 
 interface ConnectionSvgLineProps extends React.SVGProps<SVGLineElement> {
   key: string
@@ -50,6 +57,16 @@ const ConnectionCanvas = (props: ConnectionContainerProps) => {
           // markerEnd="url(#arrowhead)"
         />
       ))}
+
+      {/* Styled Path with Curvature / Arc
+      <StyledSvgPath
+        // d="M 100 350 q 150 -300 300 0"
+        d="M 130 110 C 120 140, 180 140, 170 110"
+        stroke="steelblue"
+        strokeWidth="2"
+        fill="none"
+        markerEnd="url(#arrowhead)"
+      /> */}
     </StyledSvgContainer>
   )
 }
