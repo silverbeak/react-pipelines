@@ -19,21 +19,4 @@ const calculatePosition = (originConnection: HTMLElement, blockData: BlockData[]
   return { x1, y1 }
 }
 
-const calculateOriginPosition = (event: React.DragEvent<HTMLDivElement>, blockData: BlockData[]) => {
-  const originConnection = event.currentTarget
-  const position = calculatePosition(
-    originConnection,
-    blockData,
-    originConnection.getBoundingClientRect().x,
-    originConnection.getBoundingClientRect().y,
-  )
-
-  return { x1: position.x1, y1: position.y1, x2: position.x1, y2: position.y1 }
-}
-
-const calculateUpdatedPosition = (event: React.DragEvent<HTMLDivElement>, blockData: BlockData[]) => {
-  const position = calculatePosition(event.currentTarget, blockData, event.clientX, event.clientY)
-  return { x2: position.x1, y2: position.y1 }
-}
-
-export { calculatePosition, calculateOriginPosition, calculateUpdatedPosition }
+export { calculatePosition }

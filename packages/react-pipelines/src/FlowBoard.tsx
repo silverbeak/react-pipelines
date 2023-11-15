@@ -23,15 +23,21 @@ const Board = styled.div`
 
 const FlowBoard = (props: FlowBoardProps) => {
   const [blockData, setBlockData] = useState<BlockData[]>(props.blockData)
+  const [boundaryRect, setBoundaryRect] = useState<DOMRect | null>(null)
 
-  const { blocks, connectionLinesData } = useConnectionDrag(blockData, props.connectionLineData)
+  const { blocks, connectionLinesData } = useConnectionDrag(
+    blockData,
+    props.connectionLineData,
+    boundaryRect?.x || 0,
+    boundaryRect?.y || 0,
+  )
   const { svgConnectionLines } = useConnectionDraw(connectionLinesData, blockData)
 
-  const dragStuff = (event: React.DragEvent<HTMLDivElement>) => {
+  const dragBlock = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
   }
 
-  const dropStuff = (event: React.DragEvent<HTMLDivElement>) => {
+  const dropBlock = (event: React.DragEvent<HTMLDivElement>) => {
     const movedBlockId = event.dataTransfer.getData('movedBlockId')
     const originalX = event.dataTransfer.getData('originX')
     const originalY = event.dataTransfer.getData('originY')
@@ -54,7 +60,15 @@ const FlowBoard = (props: FlowBoardProps) => {
   }
 
   return (
-    <Board id={props.id} className="flow-board" onDragOver={dragStuff} onDrop={dropStuff}>
+    <Board
+      id={props.id}
+      className="flow-board"
+      onDragOver={dragBlock}
+      onDrop={dropBlock}
+      ref={(el) => {
+        if (!!el && !boundaryRect) setBoundaryRect(el.getBoundingClientRect())
+      }}
+    >
       {blocks}
       <ConnectionCanvas key="connection-canvas" lines={svgConnectionLines} />
     </Board>

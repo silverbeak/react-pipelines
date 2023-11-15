@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react'
 import { parseBlockData } from '../utils/BlockParser'
 import { BlockData } from '../utils/BlockUtils'
 import { ConnectionLineData, TemporaryConnectionLineData } from '../utils/ConnectionUtils'
-import { calculateOriginPosition, calculateUpdatedPosition } from '../utils/PositionCalculator'
 
-const useConnectionDrag = (blockData: BlockData[], connectionLineData: ConnectionLineData[]) => {
+const useConnectionDrag = (
+  blockData: BlockData[],
+  connectionLineData: ConnectionLineData[],
+  offsetX: number,
+  offsetY: number,
+) => {
   const [connectionLinesData, setConnectionLines] = useState<(ConnectionLineData | TemporaryConnectionLineData)[]>([])
   const [currentConnectionLine, setCurrentConnectionLine] = useState<TemporaryConnectionLineData | null>(null)
 
@@ -13,7 +17,7 @@ const useConnectionDrag = (blockData: BlockData[], connectionLineData: Connectio
     event.dataTransfer.setData('originConnectionPoint', event.currentTarget.id)
     const originConnectionPointId = event.currentTarget.id
     const originParentBlock = blockData.find((block) => block.id === originConnectionPointId.split('-')[0])!
-    const { x2, y2 } = calculateOriginPosition(event, blockData)
+    const { x2, y2 } = { x2: event.clientX - offsetX, y2: event.clientY - offsetY }
     const connectionLine: TemporaryConnectionLineData = {
       id: 'xxx',
       key: 'xxx',
@@ -32,7 +36,7 @@ const useConnectionDrag = (blockData: BlockData[], connectionLineData: Connectio
     const originConnectionPointId = event.currentTarget.id
     const originParentBlock = blockData.find((block) => block.id === originConnectionPointId.split('-')[0])!
     if (currentConnectionLine) {
-      const { x2, y2 } = calculateUpdatedPosition(event, blockData)
+      const { x2, y2 } = { x2: event.clientX - offsetX, y2: event.clientY - offsetY }
       const newConnectionLine: TemporaryConnectionLineData = {
         key: 'xxx',
         id: 'xxx',
@@ -44,6 +48,7 @@ const useConnectionDrag = (blockData: BlockData[], connectionLineData: Connectio
       // Filter out old connection line
       const filteredConnectionLines = connectionLinesData.filter((connectionLine) => connectionLine.key !== 'xxx')
       setConnectionLines([...filteredConnectionLines, newConnectionLine])
+      setCurrentConnectionLine(newConnectionLine)
     }
   }
 
