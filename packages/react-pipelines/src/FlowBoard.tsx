@@ -4,6 +4,7 @@ import { ConnectionCanvas } from './connections/ConnectionLine'
 import useConnectionDrag from './hooks/useConnectionDrag'
 import { useState } from 'react'
 import { ConnectionLineData } from './utils/ConnectionUtils'
+import useConnectionDraw from './hooks/useConnectionDraw'
 
 interface FlowBoardProps {
   id: string
@@ -23,10 +24,10 @@ const Board = styled.div`
 const FlowBoard = (props: FlowBoardProps) => {
   const [blockData, setBlockData] = useState<BlockData[]>(props.blockData)
 
-  const { blocks, connectionLines } = useConnectionDrag(blockData, props.connectionLineData)
+  const { blocks, connectionLinesData } = useConnectionDrag(blockData, props.connectionLineData)
+  const { svgConnectionLines } = useConnectionDraw(connectionLinesData, blockData)
 
   const dragStuff = (event: React.DragEvent<HTMLDivElement>) => {
-    // console.log('dragStuff', event.clientX, event.clientY)
     event.preventDefault()
   }
 
@@ -34,7 +35,6 @@ const FlowBoard = (props: FlowBoardProps) => {
     const movedBlockId = event.dataTransfer.getData('movedBlockId')
     const originalX = event.dataTransfer.getData('originX')
     const originalY = event.dataTransfer.getData('originY')
-    console.log('dropStuff', movedBlockId, originalX, originalY)
     setBlockData((blocks) =>
       blocks.map((block) => {
         if (block.id === movedBlockId) {
@@ -56,7 +56,7 @@ const FlowBoard = (props: FlowBoardProps) => {
   return (
     <Board id={props.id} className="flow-board" onDragOver={dragStuff} onDrop={dropStuff}>
       {blocks}
-      <ConnectionCanvas key="connection-canvas" lines={connectionLines} />
+      <ConnectionCanvas key="connection-canvas" lines={svgConnectionLines} />
     </Board>
   )
 }

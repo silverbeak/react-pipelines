@@ -6,3 +6,12 @@ export interface ConnectionLineData {
   destinationBlockId: string
   destinationConnectionPointId: string
 }
+
+export interface TemporaryConnectionLineData {
+  key: string
+  id: string
+  originBlockId: string
+  originConnectionPointId: string
+  x: number
+  y: number
+}

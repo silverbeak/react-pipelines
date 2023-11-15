@@ -40,7 +40,6 @@ export function usePipelineDrag(startX: number = 0, startY: number = 0) {
       event.clientY < lowerBound
 
     if (insideBounds && !isConnectionElement) {
-      // console.log('insideBounds', insideBounds, event.currentTarget.id)
       const newX = event.clientX - originX + x
       const newY = event.clientY - originY + y
       setX(newX)
