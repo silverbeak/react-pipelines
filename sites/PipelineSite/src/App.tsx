@@ -38,14 +38,18 @@ function App() {
             },
           },
         ]}
-        connectionLineData={[{
-          key: 'startblock1-erroroutput#midblock1-errorinput',
-          id: 'startblock1-erroroutput#midblock1-errorinput',
-          originBlockId: 'startblock1',
-          originConnectionPointId: 'startblock1-erroroutput',
-          destinationBlockId: 'midblock1',
-          destinationConnectionPointId: 'midblock1-errorinput',
-        }]}
+        connectionLineData={[
+          {
+            key: 'startblock1-erroroutput#midblock1-errorinput',
+            id: 'startblock1-erroroutput#midblock1-errorinput',
+            originBlockId: 'startblock1',
+            originConnectionPointId: 'startblock1-erroroutput',
+            destinationBlockId: 'midblock1',
+            destinationConnectionPointId: 'midblock1-errorinput',
+          },
+        ]}
+        onBlockUpdate={(blocks) => console.log('Block update', blocks)}
+        onConnectionLineUpdate={(lines) => console.log('Connection line update', lines)}
       />
       <div className="card">
         <p>

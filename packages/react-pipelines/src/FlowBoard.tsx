@@ -10,6 +10,8 @@ interface FlowBoardProps {
   id: string
   blockData: BlockData[]
   connectionLineData: ConnectionLineData[]
+  onConnectionLineUpdate: (connectionLineData: ConnectionLineData[]) => void
+  onBlockUpdate: (blockData: BlockData[]) => void
 }
 
 const Board = styled.div`
@@ -23,13 +25,14 @@ const Board = styled.div`
 
 const FlowBoard = (props: FlowBoardProps) => {
   const [blockData, setBlockData] = useState<BlockData[]>(props.blockData)
-  const [boundaryRect, setBoundaryRect] = useState<DOMRect | null>(null)
+  const [boundaryRect, setBoundaryRect] = useState<{ x: number; y: number } | null>(null)
 
   const { blocks, connectionLinesData } = useConnectionDrag(
     blockData,
     props.connectionLineData,
     boundaryRect?.x || 0,
     boundaryRect?.y || 0,
+    props.onConnectionLineUpdate,
   )
   const { svgConnectionLines } = useConnectionDraw(connectionLinesData, blockData)
 
@@ -57,6 +60,8 @@ const FlowBoard = (props: FlowBoardProps) => {
         return block
       }),
     )
+
+    props.onBlockUpdate(blockData)
   }
 
   return (
@@ -66,7 +71,13 @@ const FlowBoard = (props: FlowBoardProps) => {
       onDragOver={dragBlock}
       onDrop={dropBlock}
       ref={(el) => {
-        if (!!el && !boundaryRect) setBoundaryRect(el.getBoundingClientRect())
+        if (!!el && !boundaryRect) {
+          const rect = el.getBoundingClientRect()
+          const x = rect.top
+          const y = rect.left
+          // console.log('Setting boundary rect', { x, y })
+          setBoundaryRect({ x, y })
+        }
       }}
     >
       {blocks}
