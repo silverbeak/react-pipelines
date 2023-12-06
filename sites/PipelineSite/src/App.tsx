@@ -16,6 +16,7 @@ function App() {
       </div>
       <FlowBoard
         id="main-flow-board"
+        showToolbox={true}
         blockData={[
           {
             key: 'startblock1',
@@ -23,7 +24,7 @@ function App() {
             blockType: 'start',
             draggable: 'true',
             transformData: {
-              translateX: 100,
+              translateX: 300,
               translateY: 100,
             },
           },
@@ -33,8 +34,8 @@ function App() {
             blockType: 'mid',
             draggable: 'true',
             transformData: {
-              translateX: 500,
-              translateY: 150,
+              translateX: 700,
+              translateY: 250,
             },
           },
         ]}
@@ -51,11 +52,6 @@ function App() {
         onBlockUpdate={(blocks) => console.log('Block update', blocks)}
         onConnectionLineUpdate={(lines) => console.log('Connection line update', lines)}
       />
-      <div className="card">
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
     </>
   )
 }

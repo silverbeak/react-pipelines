@@ -18,10 +18,10 @@ const useConnectionDrag = (
     event.dataTransfer.setData('originConnectionPoint', event.currentTarget.id)
     const originConnectionPointId = event.currentTarget.id
     const originParentBlock = blockData.find((block) => block.id === originConnectionPointId.split('-')[0])!
-    const { x2, y2 } = {
-      x2: event.clientX - offsetY - window.scrollX,
-      y2: event.clientY - offsetY * 2 + window.scrollY,
-    }
+
+    const x2 = event.clientX + window.scrollX - offsetX
+    const y2 = event.clientY + window.scrollY - offsetY
+    
     const connectionLine: TemporaryConnectionLineData = {
       id: 'xxx',
       key: 'xxx',
@@ -37,13 +37,15 @@ const useConnectionDrag = (
   const onOutputConnectionPointDrag = (event: React.DragEvent<HTMLDivElement>) => {
     event.stopPropagation()
     if (currentConnectionLine) {
-      const { x2, y2 } = { x2: event.clientX - offsetY - window.scrollX, y2: event.clientY - offsetY * 2 + window.scrollY}
-      // console.log('Update connection line', event.clientX, offsetX, window.scrollY, event.clientX, offsetY, window.scrollX)
+      const x2 = event.clientX + window.scrollX - offsetX
+      const y2 = event.clientY + window.scrollY - offsetY
+
       const newConnectionLine = Object.assign({}, currentConnectionLine, { x: x2, y: y2 })
-      // Filter out old connection line
+      // Filter out old "temporary" connection line and add the updated one
       const filteredConnectionLines = connectionLinesData.filter((connectionLine) => connectionLine.key !== 'xxx')
       setConnectionLines([...filteredConnectionLines, newConnectionLine])
       setCurrentConnectionLine(newConnectionLine)
+
     }
   }
 
@@ -92,6 +94,9 @@ const useConnectionDrag = (
       onConnectionLineDrag: onOutputConnectionPointDrag,
       onConnectionLineDragEnd: onOutputConnectionPointDragEnd,
       onConnectionLineDrop: onInputConnectionLineDrop,
+    }, {
+      onDragBlockStart: () => {},
+      onDragBlockEnd: () => {},
     }),
   )
 

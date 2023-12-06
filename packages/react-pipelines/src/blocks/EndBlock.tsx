@@ -1,18 +1,18 @@
 import React from 'react'
 import BaseBlock from './BaseBlock'
 import { usePipelineDrag } from '../hooks/usePipelineDrag'
-import { ErrorOutputConnectionPoint, OutputConnectionPoint } from '../connections/ConnectionPoint'
+import { ErrorInputConnectionPoint, InputConnectionPoint } from '../connections/ConnectionPoint'
 import { DragBlockProps, DragConnectionLineProps } from '../utils/BlockParser'
 import { TransformData } from '../utils/BlockUtils'
 
-interface StartBlockProps {
+interface EndBlockProps {
   id: string
   children?: React.ReactNode
   draggable?: string
   transformData: TransformData
 }
 
-const StartBlock = (props: StartBlockProps & DragConnectionLineProps & DragBlockProps) => {
+const EndBlock = (props: EndBlockProps & DragConnectionLineProps & DragBlockProps) => {
   const { transformData, onDragStart, onDragEnd } = usePipelineDrag(
     props.transformData.translateX,
     props.transformData.translateY,
@@ -27,14 +27,14 @@ const StartBlock = (props: StartBlockProps & DragConnectionLineProps & DragBlock
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
     >
-      <OutputConnectionPoint
+      <InputConnectionPoint
         id={`${props.id}-output`}
         draggable="true"
         onDragStart={props.onConnectionLineDragStart}
         onDrag={props.onConnectionLineDrag}
         onDragEnd={props.onConnectionLineDragEnd}
       />
-      <ErrorOutputConnectionPoint 
+      <ErrorInputConnectionPoint 
         id={`${props.id}-erroroutput`} 
         draggable="true"
         onDragStart={props.onConnectionLineDragStart}
@@ -42,9 +42,9 @@ const StartBlock = (props: StartBlockProps & DragConnectionLineProps & DragBlock
         onDragEnd={props.onConnectionLineDragEnd}
       />
       {props.children}
-      This is a StartBlock
+      This is an EndBlock
     </BaseBlock>
   )
 }
 
-export default StartBlock
+export default EndBlock

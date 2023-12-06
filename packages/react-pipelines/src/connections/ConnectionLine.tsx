@@ -47,6 +47,7 @@ const ConnectionCanvas = (props: ConnectionContainerProps) => {
       </defs> */}
       {props.lines.map((line) => (
         <StyledSvgLine
+          id={line.key}
           key={line.key}
           x1={line.x1}
           y1={line.y1}

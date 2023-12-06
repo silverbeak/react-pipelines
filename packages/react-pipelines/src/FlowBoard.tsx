@@ -5,6 +5,7 @@ import useConnectionDrag from './hooks/useConnectionDrag'
 import { useState } from 'react'
 import { ConnectionLineData } from './utils/ConnectionUtils'
 import useConnectionDraw from './hooks/useConnectionDraw'
+import Toolbox from './toolbox/Toolbox'
 
 interface FlowBoardProps {
   id: string
@@ -12,6 +13,7 @@ interface FlowBoardProps {
   connectionLineData: ConnectionLineData[]
   onConnectionLineUpdate: (connectionLineData: ConnectionLineData[]) => void
   onBlockUpdate: (blockData: BlockData[]) => void
+  showToolbox: boolean
 }
 
 const Board = styled.div`
@@ -42,47 +44,75 @@ const FlowBoard = (props: FlowBoardProps) => {
 
   const dropBlock = (event: React.DragEvent<HTMLDivElement>) => {
     const movedBlockId = event.dataTransfer.getData('movedBlockId')
-    const originalX = event.dataTransfer.getData('originX')
-    const originalY = event.dataTransfer.getData('originY')
-    setBlockData((blocks) =>
-      blocks.map((block) => {
-        if (block.id === movedBlockId) {
-          const newX = event.clientX + parseInt(originalX)
-          const newY = event.clientY + parseInt(originalY)
-          return {
-            ...block,
-            transformData: {
-              translateX: newX,
-              translateY: newY,
-            },
+
+    if (movedBlockId === 'newBlock') {
+      const blockType = event.dataTransfer.getData('blockType')
+      // BlockType is either "start", "mid" or "end". Here, we create a new block of that type. The block will be
+      // positioned where the user dropped it, compensating for the scroll position.
+
+      const scrollX = window.scrollX
+      const scrollY = window.scrollY
+
+      const newBlockId = Math.random().toString(36).substring(7)
+      console.log('Scroll', scrollX, scrollY, newBlockId, boundaryRect!.x, boundaryRect!.y)
+
+      const newBlock: BlockData = {
+        id: newBlockId,
+        key: newBlockId,
+        blockType,
+        transformData: {
+          translateX: event.clientX - boundaryRect!.x - scrollX,
+          translateY: event.clientY - boundaryRect!.y - scrollY,
+        },
+      }
+
+      setBlockData((blocks) => [...blocks, newBlock])
+    } else {
+      const originalX = event.dataTransfer.getData('originX')
+      const originalY = event.dataTransfer.getData('originY')
+      setBlockData((blocks) =>
+        blocks.map((block) => {
+          if (block.id === movedBlockId) {
+            const newX = event.clientX + parseInt(originalX)
+            const newY = event.clientY + parseInt(originalY)
+            return {
+              ...block,
+              transformData: {
+                translateX: newX,
+                translateY: newY,
+              },
+            }
           }
-        }
-        return block
-      }),
-    )
+          return block
+        }),
+      )
+    }
 
     props.onBlockUpdate(blockData)
   }
 
   return (
-    <Board
-      id={props.id}
-      className="flow-board"
-      onDragOver={dragBlock}
-      onDrop={dropBlock}
-      ref={(el) => {
-        if (!!el && !boundaryRect) {
-          const rect = el.getBoundingClientRect()
-          const x = rect.top
-          const y = rect.left
-          // console.log('Setting boundary rect', { x, y })
-          setBoundaryRect({ x, y })
-        }
-      }}
-    >
-      {blocks}
-      <ConnectionCanvas key="connection-canvas" lines={svgConnectionLines} />
-    </Board>
+    <div>
+      {props.showToolbox && <Toolbox>Hello!</Toolbox>}
+
+      <Board
+        id={props.id}
+        className="flow-board"
+        onDragOver={dragBlock}
+        onDrop={dropBlock}
+        ref={(el) => {
+          if (!!el && !boundaryRect) {
+            const rect = el.getBoundingClientRect()
+            const x = rect.left
+            const y = rect.top
+            setBoundaryRect({ x, y })
+          }
+        }}
+      >
+        {blocks}
+        <ConnectionCanvas key="connection-canvas" lines={svgConnectionLines} />
+      </Board>
+    </div>
   )
 }
 

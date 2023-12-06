@@ -3,6 +3,7 @@ import BaseBlock from '../blocks/BaseBlock'
 import { BlockData } from './BlockUtils'
 import StartBlock from '../blocks/StartBlock'
 import MidBlock from '../blocks/MidBlock'
+import EndBlock from '../blocks/EndBlock'
 
 export interface DragConnectionLineProps {
   onConnectionLineDragStart: (event: React.DragEvent<HTMLDivElement>) => void
@@ -11,12 +12,24 @@ export interface DragConnectionLineProps {
   onConnectionLineDrop: (event: React.DragEvent<HTMLDivElement>) => void
 }
 
-function parseBlockData(input: BlockData, connectionLinesProps: DragConnectionLineProps): React.ReactElement {
+export interface DragBlockProps {
+  onDragBlockStart: (event: React.DragEvent<HTMLDivElement>) => void
+  onDragBlockEnd: (event: React.DragEvent<HTMLDivElement>) => void
+}
+
+function parseBlockData(
+  input: BlockData,
+  connectionLinesProps: DragConnectionLineProps,
+  dragBlockProps: DragBlockProps,
+): React.ReactElement {
   switch (input.blockType) {
     case 'start':
-      return <StartBlock {...input} {...connectionLinesProps} />
+      return <StartBlock {...input} {...connectionLinesProps} {...dragBlockProps} />
     case 'mid':
       return <MidBlock {...input} {...connectionLinesProps} />
+    case 'end':
+      return <EndBlock {...input} {...connectionLinesProps} {...dragBlockProps} />
+
     default:
       return <BaseBlock {...input} />
   }
