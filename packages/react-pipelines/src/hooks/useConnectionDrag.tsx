@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { parseBlockData } from '../utils/BlockParser'
+import { useState } from 'react'
 import { BlockData } from '../utils/BlockUtils'
 import { ConnectionLineData, TemporaryConnectionLineData } from '../utils/ConnectionUtils'
 
@@ -10,7 +9,7 @@ const useConnectionDrag = (
   offsetY: number,
   onConnectionLineUpdate: (connectionLineData: ConnectionLineData[]) => void = () => {},
 ) => {
-  const [connectionLinesData, setConnectionLines] = useState<(ConnectionLineData | TemporaryConnectionLineData)[]>([])
+  const [connectionLinesData, setConnectionLines] = useState<(ConnectionLineData | TemporaryConnectionLineData)[]>(connectionLineData)
   const [currentConnectionLine, setCurrentConnectionLine] = useState<TemporaryConnectionLineData | null>(null)
 
   const onOutputConnectionPointDragStart = (event: React.DragEvent<HTMLDivElement>) => {
@@ -21,7 +20,7 @@ const useConnectionDrag = (
 
     const x2 = event.clientX + window.scrollX - offsetX
     const y2 = event.clientY + window.scrollY - offsetY
-    
+
     const connectionLine: TemporaryConnectionLineData = {
       id: 'xxx',
       key: 'xxx',
@@ -45,7 +44,6 @@ const useConnectionDrag = (
       const filteredConnectionLines = connectionLinesData.filter((connectionLine) => connectionLine.key !== 'xxx')
       setConnectionLines([...filteredConnectionLines, newConnectionLine])
       setCurrentConnectionLine(newConnectionLine)
-
     }
   }
 
@@ -84,23 +82,13 @@ const useConnectionDrag = (
     })
   }
 
-  useEffect(() => {
-    setConnectionLines(connectionLineData)
-  }, [connectionLineData])
-
-  const blocks = blockData?.map((block) =>
-    parseBlockData(block, {
-      onConnectionLineDragStart: onOutputConnectionPointDragStart,
-      onConnectionLineDrag: onOutputConnectionPointDrag,
-      onConnectionLineDragEnd: onOutputConnectionPointDragEnd,
-      onConnectionLineDrop: onInputConnectionLineDrop,
-    }, {
-      onDragBlockStart: () => {},
-      onDragBlockEnd: () => {},
-    }),
-  )
-
-  return { blocks, connectionLinesData }
+  return {
+    connectionLinesData,
+    onOutputConnectionPointDragStart,
+    onOutputConnectionPointDrag,
+    onOutputConnectionPointDragEnd,
+    onInputConnectionLineDrop,
+  }
 }
 
 export default useConnectionDrag

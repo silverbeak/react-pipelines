@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { ConnectionLineData } from './utils/ConnectionUtils'
 import useConnectionDraw from './hooks/useConnectionDraw'
 import Toolbox from './toolbox/Toolbox'
+import { parseBlockData } from './utils/BlockParser'
 
 interface FlowBoardProps {
   id: string
@@ -29,13 +30,20 @@ const FlowBoard = (props: FlowBoardProps) => {
   const [blockData, setBlockData] = useState<BlockData[]>(props.blockData)
   const [boundaryRect, setBoundaryRect] = useState<{ x: number; y: number } | null>(null)
 
-  const { blocks, connectionLinesData } = useConnectionDrag(
+  const {
+    connectionLinesData,
+    onOutputConnectionPointDragStart,
+    onOutputConnectionPointDrag,
+    onOutputConnectionPointDragEnd,
+    onInputConnectionLineDrop,
+  } = useConnectionDrag(
     blockData,
     props.connectionLineData,
     boundaryRect?.x || 0,
     boundaryRect?.y || 0,
     props.onConnectionLineUpdate,
   )
+
   const { svgConnectionLines } = useConnectionDraw(connectionLinesData, blockData)
 
   const dragBlock = (event: React.DragEvent<HTMLDivElement>) => {
@@ -54,11 +62,11 @@ const FlowBoard = (props: FlowBoardProps) => {
       const scrollY = window.scrollY
 
       const newBlockId = Math.random().toString(36).substring(7)
-      console.log('Scroll', scrollX, scrollY, newBlockId, boundaryRect!.x, boundaryRect!.y)
 
       const newBlock: BlockData = {
         id: newBlockId,
         key: newBlockId,
+        draggable: 'true',
         blockType,
         transformData: {
           translateX: event.clientX - boundaryRect!.x - scrollX,
@@ -90,6 +98,22 @@ const FlowBoard = (props: FlowBoardProps) => {
 
     props.onBlockUpdate(blockData)
   }
+
+  const blocks = blockData?.map((block) =>
+    parseBlockData(
+      block,
+      {
+        onConnectionLineDragStart: onOutputConnectionPointDragStart,
+        onConnectionLineDrag: onOutputConnectionPointDrag,
+        onConnectionLineDragEnd: onOutputConnectionPointDragEnd,
+        onConnectionLineDrop: onInputConnectionLineDrop,
+      },
+      {
+        onDragBlockStart: () => {},
+        onDragBlockEnd: () => {},
+      },
+    ),
+  )
 
   return (
     <div>
