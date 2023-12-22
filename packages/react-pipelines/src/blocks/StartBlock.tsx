@@ -42,7 +42,6 @@ const StartBlock = (props: StartBlockProps & DragConnectionLineProps & DragBlock
         onDragEnd={props.onConnectionLineDragEnd}
       />
       {props.children}
-      This is a StartBlock
     </BaseBlock>
   )
 }

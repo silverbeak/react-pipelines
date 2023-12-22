@@ -2,7 +2,8 @@ interface BlockData {
   id: string
   blockType: string
   transformData: TransformData
-  [key: string]: string | number | boolean | TransformData | undefined
+  children: JSX.Element[]
+  [key: string]: string | number | boolean | TransformData | JSX.Element[] | undefined
 }
 
 interface TransformData {

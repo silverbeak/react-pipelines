@@ -30,7 +30,6 @@ const EndBlock = (props: EndBlockProps & DragConnectionLineProps & DragBlockProp
       <InputConnectionPoint id={`${props.id}-output`} onDrop={props.onConnectionLineDrop} />
       <ErrorInputConnectionPoint id={`${props.id}-erroroutput`} onDrop={props.onConnectionLineDrop} />
       {props.children}
-      This is an EndBlock
     </BaseBlock>
   )
 }

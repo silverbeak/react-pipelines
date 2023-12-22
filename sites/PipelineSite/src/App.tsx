@@ -23,6 +23,7 @@ function App() {
             id: 'startblock1',
             blockType: 'start',
             draggable: 'true',
+            children: [<div>Pre-defined start block</div>],
             transformData: {
               translateX: 300,
               translateY: 100,
@@ -33,6 +34,7 @@ function App() {
             id: 'midblock1',
             blockType: 'mid',
             draggable: 'true',
+            children: [<div>Pre-defined mid block</div>],
             transformData: {
               translateX: 700,
               translateY: 250,

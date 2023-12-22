@@ -63,11 +63,14 @@ const FlowBoard = (props: FlowBoardProps) => {
 
       const newBlockId = Math.random().toString(36).substring(7)
 
+      const children = [<div>Dropped {blockType} block</div>]
+
       const newBlock: BlockData = {
         id: newBlockId,
         key: newBlockId,
         draggable: 'true',
         blockType,
+        children: children,
         transformData: {
           translateX: event.clientX - boundaryRect!.x - scrollX,
           translateY: event.clientY - boundaryRect!.y - scrollY,

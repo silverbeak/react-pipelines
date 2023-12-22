@@ -24,11 +24,17 @@ function parseBlockData(
 ): React.ReactElement {
   switch (input.blockType) {
     case 'start':
-      return <StartBlock {...input} {...connectionLinesProps} {...dragBlockProps} />
+      return <StartBlock {...input} {...connectionLinesProps} {...dragBlockProps}>
+        {input.children}
+      </StartBlock>
     case 'mid':
-      return <MidBlock {...input} {...connectionLinesProps} />
+      return <MidBlock {...input} {...connectionLinesProps}>
+        {input.children}
+      </MidBlock>
     case 'end':
-      return <EndBlock {...input} {...connectionLinesProps} {...dragBlockProps} />
+      return <EndBlock {...input} {...connectionLinesProps} {...dragBlockProps}>
+        {input.children}
+      </EndBlock>
 
     default:
       return <BaseBlock {...input} />
