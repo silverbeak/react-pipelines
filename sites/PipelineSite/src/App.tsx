@@ -23,7 +23,7 @@ function App() {
             id: 'startblock1',
             blockType: 'start',
             draggable: 'true',
-            children: [<div>Pre-defined start block</div>],
+            children: [<div key="abc">Pre-defined start block</div>],
             transformData: {
               translateX: 300,
               translateY: 100,
@@ -34,7 +34,7 @@ function App() {
             id: 'midblock1',
             blockType: 'mid',
             draggable: 'true',
-            children: [<div>Pre-defined mid block</div>],
+            children: [<div key="xyz">Pre-defined mid block</div>],
             transformData: {
               translateX: 700,
               translateY: 250,
@@ -50,6 +50,11 @@ function App() {
             destinationBlockId: 'midblock1',
             destinationConnectionPointId: 'midblock1-errorinput',
           },
+        ]}
+        toolBlockDefinitions={[
+          { name: 'Start block', blockType: 'start' },
+          { name: 'Mid block', blockType: 'mid' },
+          { name: 'End block', blockType: 'end' },
         ]}
         onBlockUpdate={(blocks) => console.log('Block update', blocks)}
         onConnectionLineUpdate={(lines) => console.log('Connection line update', lines)}

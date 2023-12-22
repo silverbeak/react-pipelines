@@ -7,10 +7,12 @@ import { ConnectionLineData } from './utils/ConnectionUtils'
 import useConnectionDraw from './hooks/useConnectionDraw'
 import Toolbox from './toolbox/Toolbox'
 import { parseBlockData } from './utils/BlockParser'
+import { ToolBlockDefinition } from './toolbox/ToolBlock'
 
 interface FlowBoardProps {
   id: string
   blockData: BlockData[]
+  toolBlockDefinitions: ToolBlockDefinition[]
   connectionLineData: ConnectionLineData[]
   onConnectionLineUpdate: (connectionLineData: ConnectionLineData[]) => void
   onBlockUpdate: (blockData: BlockData[]) => void
@@ -63,6 +65,7 @@ const FlowBoard = (props: FlowBoardProps) => {
 
       const newBlockId = Math.random().toString(36).substring(7)
 
+      // TODO: This should have a key, right?
       const children = [<div>Dropped {blockType} block</div>]
 
       const newBlock: BlockData = {
@@ -120,7 +123,7 @@ const FlowBoard = (props: FlowBoardProps) => {
 
   return (
     <div>
-      {props.showToolbox && <Toolbox>Hello!</Toolbox>}
+      {props.showToolbox && <Toolbox toolblocks={props.toolBlockDefinitions} />}
 
       <Board
         id={props.id}
