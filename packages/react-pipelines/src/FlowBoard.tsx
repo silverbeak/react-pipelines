@@ -80,12 +80,16 @@ const FlowBoard = (props: FlowBoardProps) => {
         },
       }
 
-      setBlockData((blocks) => [...blocks, newBlock])
+      setBlockData((blocks) => {
+        const newBlocks = [...blocks, newBlock]
+        props.onBlockUpdate(newBlocks)
+        return newBlocks
+      })
     } else {
       const originalX = event.dataTransfer.getData('originX')
       const originalY = event.dataTransfer.getData('originY')
-      setBlockData((blocks) =>
-        blocks.map((block) => {
+      setBlockData((blocks) => {
+        const newBlocks = blocks.map((block) => {
           if (block.id === movedBlockId) {
             const newX = event.clientX + parseInt(originalX)
             const newY = event.clientY + parseInt(originalY)
@@ -98,11 +102,11 @@ const FlowBoard = (props: FlowBoardProps) => {
             }
           }
           return block
-        }),
-      )
+        })
+        props.onBlockUpdate(newBlocks)
+        return newBlocks
+      })
     }
-
-    props.onBlockUpdate(blockData)
   }
 
   const blocks = blockData?.map((block) =>
