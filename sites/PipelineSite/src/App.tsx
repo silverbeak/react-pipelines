@@ -1,12 +1,13 @@
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { BlockData, ConnectionLineData, FlowBoard } from 'react-pipelines'
+import { BlockData, ConnectionLineData, FlowBoard, ToolBlockDefinition } from 'react-pipelines'
 import { useEffect, useState } from 'react'
 
 function App() {
   const [blockData, setBlockData] = useState<BlockData[]>()
   const [connectionLineData, setConnectionLineData] = useState<ConnectionLineData[]>()
+  const [toolBlockDefinitions, setToolBlockDefinitions] = useState<ToolBlockDefinition[]>()
 
   function updatePipelineData(newBlockData?: BlockData[], newConnectionLineData?: ConnectionLineData[]) {
     fetch('http://localhost:8000/pipeline/1', {
@@ -30,11 +31,9 @@ function App() {
   }
 
   useEffect(() => {
-    console.log('App mounted')
     fetch('http://localhost:8000/pipeline/1')
       .then((response) => response.json())
       .then((data) => {
-        console.log('Data:', data)
         const blockData = data.blockData as BlockData[]
         blockData.forEach((block: BlockData) => {
           block.children = [<div key={block.id}>Child block</div>]
@@ -45,6 +44,12 @@ function App() {
         setBlockData(blockData)
         setConnectionLineData(connectionLineData)
       })
+
+    fetch('http://localhost:8000/toolbox')
+      .then((response) => response.json())
+      .then((data) => {
+        setToolBlockDefinitions(data)
+      })
   }, [])
 
   if (!blockData) {
@@ -52,6 +57,10 @@ function App() {
   }
 
   if (!connectionLineData) {
+    return <div>Loading...</div>
+  }
+
+  if (!toolBlockDefinitions) {
     return <div>Loading...</div>
   }
 
@@ -70,11 +79,7 @@ function App() {
         showToolbox={true}
         blockData={blockData}
         connectionLineData={connectionLineData}
-        toolBlockDefinitions={[
-          { name: 'Start block', blockType: 'start' },
-          { name: 'Mid block', blockType: 'mid' },
-          { name: 'End block', blockType: 'end' },
-        ]}
+        toolBlockDefinitions={toolBlockDefinitions}
         onBlockUpdate={(blocks) => updatePipelineData(blocks, undefined)}
         onConnectionLineUpdate={(lines) => updatePipelineData(undefined, lines)}
       />

@@ -53,4 +53,12 @@ function setPipelineData(newBlockData: PipelineData) {
   connectionLineData = newBlockData.connectionLineData
 }
 
-export { getPipelineData as getBlockData, setPipelineData as setBlockData }
+function getToolBlockDefinitions() {
+  return [
+    { name: 'Start block', blockType: 'start' },
+    { name: 'Mid block', blockType: 'mid' },
+    { name: 'End block', blockType: 'end' },
+  ]
+}
+
+export { getPipelineData as getBlockData, setPipelineData as setBlockData, getToolBlockDefinitions }

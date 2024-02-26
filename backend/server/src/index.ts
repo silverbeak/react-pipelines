@@ -1,5 +1,5 @@
 import express from 'express'
-import { getBlockData, setBlockData } from './MockData'
+import { getBlockData, getToolBlockDefinitions, setBlockData } from './MockData'
 
 const app = express()
 const port = process.env.PORT || '8000'
@@ -18,6 +18,10 @@ app.post('/pipeline/1', (req, res) => {
   // Do something with the data
   console.log('Will set new data on the backend:', data)
   setBlockData(data)
+})
+
+app.get('/toolbox', (req, res) => {
+  res.json(getToolBlockDefinitions())
 })
 
 app.listen(port, () => {
