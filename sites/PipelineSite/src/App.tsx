@@ -1,9 +1,60 @@
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { FlowBoard } from 'react-pipelines'
+import { BlockData, ConnectionLineData, FlowBoard } from 'react-pipelines'
+import { useEffect, useState } from 'react'
 
 function App() {
+  const [blockData, setBlockData] = useState<BlockData[]>()
+  const [connectionLineData, setConnectionLineData] = useState<ConnectionLineData[]>()
+
+  function updatePipelineData(newBlockData?: BlockData[], newConnectionLineData?: ConnectionLineData[]) {
+    fetch('http://localhost:8000/pipeline/1', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        blockData: newBlockData ?? blockData,
+        connectionLineData: newConnectionLineData ?? connectionLineData,
+      }),
+    })
+
+    if (newBlockData) {
+      setBlockData(newBlockData)
+    }
+
+    if (newConnectionLineData) {
+      setConnectionLineData(newConnectionLineData)
+    }
+  }
+
+  useEffect(() => {
+    console.log('App mounted')
+    fetch('http://localhost:8000/pipeline/1')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Data:', data)
+        const blockData = data.blockData as BlockData[]
+        blockData.forEach((block: BlockData) => {
+          block.children = [<div key={block.id}>Child block</div>]
+        })
+
+        const connectionLineData = data.connectionLineData as ConnectionLineData[]
+
+        setBlockData(blockData)
+        setConnectionLineData(connectionLineData)
+      })
+  }, [])
+
+  if (!blockData) {
+    return <div>Loading...</div>
+  }
+
+  if (!connectionLineData) {
+    return <div>Loading...</div>
+  }
+
   return (
     <>
       <div>
@@ -17,47 +68,15 @@ function App() {
       <FlowBoard
         id="main-flow-board"
         showToolbox={true}
-        blockData={[
-          {
-            key: 'startblock1',
-            id: 'startblock1',
-            blockType: 'start',
-            draggable: 'true',
-            children: [<div key="abc">Pre-defined start block</div>],
-            transformData: {
-              translateX: 300,
-              translateY: 100,
-            },
-          },
-          {
-            key: 'midblock1',
-            id: 'midblock1',
-            blockType: 'mid',
-            draggable: 'true',
-            children: [<div key="xyz">Pre-defined mid block</div>],
-            transformData: {
-              translateX: 700,
-              translateY: 250,
-            },
-          },
-        ]}
-        connectionLineData={[
-          {
-            key: 'startblock1-erroroutput#midblock1-errorinput',
-            id: 'startblock1-erroroutput#midblock1-errorinput',
-            originBlockId: 'startblock1',
-            originConnectionPointId: 'startblock1-erroroutput',
-            destinationBlockId: 'midblock1',
-            destinationConnectionPointId: 'midblock1-errorinput',
-          },
-        ]}
+        blockData={blockData}
+        connectionLineData={connectionLineData}
         toolBlockDefinitions={[
           { name: 'Start block', blockType: 'start' },
           { name: 'Mid block', blockType: 'mid' },
           { name: 'End block', blockType: 'end' },
         ]}
-        onBlockUpdate={(blocks) => console.log('Block update', blocks)}
-        onConnectionLineUpdate={(lines) => console.log('Connection line update', lines)}
+        onBlockUpdate={(blocks) => updatePipelineData(blocks, undefined)}
+        onConnectionLineUpdate={(lines) => updatePipelineData(undefined, lines)}
       />
     </>
   )
