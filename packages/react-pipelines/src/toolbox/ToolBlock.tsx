@@ -1,3 +1,5 @@
+import styled from "styled-components"
+
 export interface ToolBlockDefinition {
   name: string
   blockType: 'start' | 'mid' | 'end'
@@ -9,9 +11,18 @@ export interface ToolBlockProps {
   tool: ToolBlockDefinition
 }
 
+const Tool = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 3px;
+`
+
 const ToolBlock = ({ tool, ...props }: ToolBlockProps) => {
   return (
-    <div
+    <Tool
       key={props.key}
       draggable="true"
       onDrag={(event) => {
@@ -27,7 +38,7 @@ const ToolBlock = ({ tool, ...props }: ToolBlockProps) => {
       }}
     >
       {tool.contentType}
-    </div>
+    </Tool>
   )
 }
 
