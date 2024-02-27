@@ -3,6 +3,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { BlockData, ConnectionLineData, FlowBoard, ToolBlockDefinition } from 'react-pipelines'
 import { useEffect, useState } from 'react'
+import { BlockContentData } from '../../../packages/react-pipelines/dist/utils/BlockUtils'
 
 function App() {
   const [blockData, setBlockData] = useState<BlockData[]>()
@@ -30,13 +31,28 @@ function App() {
     }
   }
 
+  const renderBlock = function(blockContentData: BlockContentData) {
+    switch(blockContentData.contentType) {
+      case 'Main Input':
+        return [<div>Block with content type {blockContentData.contentType}</div>]
+      case 'Pipeline Block':
+        return [<div>Block with content type {blockContentData.contentType}</div>]
+      default:
+        return [<div>Block with unknown content type {blockContentData.contentType}</div>]
+    }
+  }
+
   useEffect(() => {
     fetch('http://localhost:8000/pipeline/1')
       .then((response) => response.json())
       .then((data) => {
         const blockData = data.blockData as BlockData[]
         blockData.forEach((block: BlockData) => {
-          block.children = [<div key={block.id}>Child block</div>]
+          block.blockContentData = {
+            id: block.id,
+            contentType: block.blockContentData.contentType,
+            children: () => renderBlock(block.blockContentData)
+          } 
         })
 
         const connectionLineData = data.connectionLineData as ConnectionLineData[]

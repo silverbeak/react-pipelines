@@ -65,15 +65,25 @@ const FlowBoard = (props: FlowBoardProps) => {
 
       const newBlockId = Math.random().toString(36).substring(7)
 
-      // TODO: This should have a key, right?
-      const children = [<div>Dropped {blockType} block</div>]
+      const renderChild = function () {
+        // TODO: This should have a key, right?
+        const children = [<div>Dropped {blockType} block</div>]
+        console.log('renderChild from drop')
+        return children
+      }
+
+      const blockContentData = {
+        id: newBlockId,
+        contentType: blockType,
+        children: renderChild,
+      }
 
       const newBlock: BlockData = {
         id: newBlockId,
         key: newBlockId,
         draggable: 'true',
         blockType,
-        children: children,
+        blockContentData,
         transformData: {
           translateX: event.clientX - boundaryRect!.x - scrollX,
           translateY: event.clientY - boundaryRect!.y - scrollY,

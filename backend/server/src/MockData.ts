@@ -1,3 +1,4 @@
+import { ToolBlockDefinition } from 'react-pipelines'
 import { BlockData, ConnectionLineData } from 'react-pipelines'
 
 const initialBlockData: BlockData[] = [
@@ -6,10 +7,13 @@ const initialBlockData: BlockData[] = [
     id: 'startblock1',
     blockType: 'start',
     draggable: 'true',
-    children: [],
     transformData: {
       translateX: 300,
       translateY: 100,
+    },
+    blockContentData: {
+      id: 'input1',
+      contentType: 'Main Input',
     },
   },
   {
@@ -17,10 +21,13 @@ const initialBlockData: BlockData[] = [
     id: 'midblock1',
     blockType: 'mid',
     draggable: 'true',
-    children: [],
     transformData: {
       translateX: 700,
       translateY: 250,
+    },
+    blockContentData: {
+      id: 'pipeline1',
+      contentType: 'Pipeline Block',
     },
   },
 ]
@@ -34,6 +41,12 @@ const initialConnectionLineData: ConnectionLineData[] = [
     destinationBlockId: 'midblock1',
     destinationConnectionPointId: 'midblock1-errorinput',
   },
+]
+
+const initialToolBlockDefinitions: ToolBlockDefinition[] = [
+  { name: 'Start block', blockType: 'start', contentType: 'Main Input' },
+  { name: 'Mid block', blockType: 'mid', contentType: 'Pipeline Block'},
+  { name: 'End block', blockType: 'end', contentType: 'Main Output'},
 ]
 
 let blockData: BlockData[] = initialBlockData
@@ -54,11 +67,7 @@ function setPipelineData(newBlockData: PipelineData) {
 }
 
 function getToolBlockDefinitions() {
-  return [
-    { name: 'Start block', blockType: 'start' },
-    { name: 'Mid block', blockType: 'mid' },
-    { name: 'End block', blockType: 'end' },
-  ]
+  return initialToolBlockDefinitions
 }
 
 export { getPipelineData as getBlockData, setPipelineData as setBlockData, getToolBlockDefinitions }

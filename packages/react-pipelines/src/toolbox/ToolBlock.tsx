@@ -1,6 +1,7 @@
 export interface ToolBlockDefinition {
   name: string
   blockType: 'start' | 'mid' | 'end'
+  contentType: string
 }
 
 export interface ToolBlockProps {
@@ -24,7 +25,7 @@ const ToolBlock = ({ tool, ...props }: ToolBlockProps) => {
         console.log('Dragend for', tool.blockType, 'event', event)
       }}
     >
-      {tool.name}
+      {tool.contentType}
     </div>
   )
 }

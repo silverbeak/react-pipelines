@@ -24,20 +24,26 @@ function parseBlockData(
 ): React.ReactElement {
   switch (input.blockType) {
     case 'start':
-      return <StartBlock {...input} {...connectionLinesProps} {...dragBlockProps}>
-        {input.children}
-      </StartBlock>
+      return (
+        <StartBlock {...input} {...connectionLinesProps} {...dragBlockProps}>
+          {input.blockContentData.children && input.blockContentData.children()}
+        </StartBlock>
+      )
     case 'mid':
-      return <MidBlock {...input} {...connectionLinesProps}>
-        {input.children}
-      </MidBlock>
+      return (
+        <MidBlock {...input} {...connectionLinesProps}>
+          {input.blockContentData.children && input.blockContentData.children()}
+        </MidBlock>
+      )
     case 'end':
-      return <EndBlock {...input} {...connectionLinesProps} {...dragBlockProps}>
-        {input.children}
-      </EndBlock>
+      return (
+        <EndBlock {...input} {...connectionLinesProps} {...dragBlockProps}>
+          {input.blockContentData.children && input.blockContentData.children()}
+        </EndBlock>
+      )
 
     default:
-      return <BaseBlock {...input} />
+      return <BaseBlock {...input}>{input.blockContentData.children && input.blockContentData.children()}</BaseBlock>
   }
 }
 
