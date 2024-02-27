@@ -37,6 +37,8 @@ function App() {
         return [<div>Block with content type {blockContentData.contentType}</div>]
       case 'Pipeline Block':
         return [<div>Block with content type {blockContentData.contentType}</div>]
+      case 'Main Output':
+        return [<div>Block with content type {blockContentData.contentType}</div>]
       default:
         return [<div>Block with unknown content type {blockContentData.contentType}</div>]
     }
@@ -48,11 +50,11 @@ function App() {
       .then((data) => {
         const blockData = data.blockData as BlockData[]
         blockData.forEach((block: BlockData) => {
-          block.blockContentData = {
+          const blockContentData: BlockContentData = {
             id: block.id,
             contentType: block.blockContentData.contentType,
-            children: () => renderBlock(block.blockContentData)
           } 
+          block.renderer = () => renderBlock(blockContentData)
         })
 
         const connectionLineData = data.connectionLineData as ConnectionLineData[]
@@ -98,6 +100,7 @@ function App() {
         toolBlockDefinitions={toolBlockDefinitions}
         onBlockUpdate={(blocks) => updatePipelineData(blocks, undefined)}
         onConnectionLineUpdate={(lines) => updatePipelineData(undefined, lines)}
+        renderBlock={renderBlock}
       />
     </>
   )

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { BlockData } from './utils/BlockUtils'
+import { BlockContentData, BlockData } from './utils/BlockUtils'
 import { ConnectionCanvas } from './connections/ConnectionLine'
 import useConnectionDrag from './hooks/useConnectionDrag'
 import { useState } from 'react'
@@ -16,6 +16,7 @@ interface FlowBoardProps {
   connectionLineData: ConnectionLineData[]
   onConnectionLineUpdate: (connectionLineData: ConnectionLineData[]) => void
   onBlockUpdate: (blockData: BlockData[]) => void
+  renderBlock: (blockContentData: BlockContentData) => JSX.Element[]
   showToolbox: boolean
 }
 
@@ -56,26 +57,20 @@ const FlowBoard = (props: FlowBoardProps) => {
     const movedBlockId = event.dataTransfer.getData('movedBlockId')
 
     if (movedBlockId === 'newBlock') {
-      const blockType = event.dataTransfer.getData('blockType')
       // BlockType is either "start", "mid" or "end". Here, we create a new block of that type. The block will be
       // positioned where the user dropped it, compensating for the scroll position.
+      const blockType = event.dataTransfer.getData('blockType')
+      const contentType = event.dataTransfer.getData('contentType')
 
       const scrollX = window.scrollX
       const scrollY = window.scrollY
 
       const newBlockId = Math.random().toString(36).substring(7)
 
-      const renderChild = function () {
-        // TODO: This should have a key, right?
-        const children = [<div>Dropped {blockType} block</div>]
-        console.log('renderChild from drop')
-        return children
-      }
-
+      
       const blockContentData = {
         id: newBlockId,
-        contentType: blockType,
-        children: renderChild,
+        contentType: contentType,
       }
 
       const newBlock: BlockData = {
@@ -84,6 +79,7 @@ const FlowBoard = (props: FlowBoardProps) => {
         draggable: 'true',
         blockType,
         blockContentData,
+        renderer: () => props.renderBlock(blockContentData), //renderChild(blockContentData),
         transformData: {
           translateX: event.clientX - boundaryRect!.x - scrollX,
           translateY: event.clientY - boundaryRect!.y - scrollY,

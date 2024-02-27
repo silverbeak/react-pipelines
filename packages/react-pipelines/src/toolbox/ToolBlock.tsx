@@ -19,6 +19,7 @@ const ToolBlock = ({ tool, ...props }: ToolBlockProps) => {
       }}
       onDragStart={(event) => {
         event.dataTransfer.setData('blockType', tool.blockType)
+        event.dataTransfer.setData('contentType', tool.contentType)
         event.dataTransfer.setData('movedBlockId', 'newBlock')
       }}
       onDragEnd={(event) => {

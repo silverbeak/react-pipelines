@@ -26,24 +26,24 @@ function parseBlockData(
     case 'start':
       return (
         <StartBlock {...input} {...connectionLinesProps} {...dragBlockProps}>
-          {input.blockContentData.children && input.blockContentData.children()}
+          {input.renderer && input.renderer()}
         </StartBlock>
       )
     case 'mid':
       return (
         <MidBlock {...input} {...connectionLinesProps}>
-          {input.blockContentData.children && input.blockContentData.children()}
+          {input.renderer && input.renderer()}
         </MidBlock>
       )
     case 'end':
       return (
         <EndBlock {...input} {...connectionLinesProps} {...dragBlockProps}>
-          {input.blockContentData.children && input.blockContentData.children()}
+          {input.renderer && input.renderer()}
         </EndBlock>
       )
 
     default:
-      return <BaseBlock {...input}>{input.blockContentData.children && input.blockContentData.children()}</BaseBlock>
+      return <BaseBlock {...input}>{input.renderer && input.renderer()}</BaseBlock>
   }
 }
 
