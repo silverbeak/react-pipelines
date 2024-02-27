@@ -1,15 +1,18 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import { BlockData, ConnectionLineData, FlowBoard, ToolBlockDefinition } from 'react-pipelines'
 import { useEffect, useState } from 'react'
 import { BlockContentData } from '../../../packages/react-pipelines/dist/utils/BlockUtils'
 import { getPipelineData, getToolBlockDefinitions, setPipelineData } from './api/PipelineAPI'
+import { renderBlock } from './renderers/DefaultBlockRenderer'
+import { SettingsSidebar } from './components/SettingsSidebar'
+import styled from 'styled-components'
+import { OpenSettingsModalEvent } from './renderers/DefaultBlock'
 
 function App() {
   const [blockData, setBlockData] = useState<BlockData[]>()
   const [connectionLineData, setConnectionLineData] = useState<ConnectionLineData[]>()
   const [toolBlockDefinitions, setToolBlockDefinitions] = useState<ToolBlockDefinition[]>()
+  const [settingsSidebar, setSettingsSidebar] = useState<JSX.Element>()
 
   function updatePipelineData(newBlockData?: BlockData[], newConnectionLineData?: ConnectionLineData[]) {
     setPipelineData({
@@ -26,18 +29,14 @@ function App() {
     }
   }
 
-  const renderBlock = function (blockContentData: BlockContentData) {
-    switch (blockContentData.contentType) {
-      case 'Main Input':
-        return [<div>Block with content type {blockContentData.contentType}</div>]
-      case 'Pipeline Block':
-        return [<div>Block with content type {blockContentData.contentType}</div>]
-      case 'Main Output':
-        return [<div>Block with content type {blockContentData.contentType}</div>]
-      default:
-        return [<div>Block with unknown content type {blockContentData.contentType}</div>]
-    }
-  }
+  window.addEventListener('openSettingsModal', (event: unknown) => {
+    const eventDetail = event as OpenSettingsModalEvent
+    setSettingsSidebar(<SettingsSidebar blockContentData={eventDetail.detail} />)
+  })
+
+  window.addEventListener('closeSettingsModal', () => {
+    setSettingsSidebar(undefined)
+  })
 
   useEffect(() => {
     async function arrangeToolbox() {
@@ -79,26 +78,36 @@ function App() {
     return <div>Loading...</div>
   }
 
+  const BoardWithExpandableSettings = styled.div`
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+  `
+
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <FlowBoard
-        id="main-flow-board"
-        showToolbox={true}
-        blockData={blockData}
-        connectionLineData={connectionLineData}
-        toolBlockDefinitions={toolBlockDefinitions}
-        onBlockUpdate={(blocks) => updatePipelineData(blocks, undefined)}
-        onConnectionLineUpdate={(lines) => updatePipelineData(undefined, lines)}
-        renderBlock={renderBlock}
-      />
+      <BoardWithExpandableSettings>
+        <div
+          style={{
+            flex: '1',
+            overflow: 'hidden',
+          }}
+        >
+          <FlowBoard
+            id="main-flow-board"
+            showToolbox={true}
+            blockData={blockData}
+            connectionLineData={connectionLineData}
+            toolBlockDefinitions={toolBlockDefinitions}
+            onBlockUpdate={(blocks) => updatePipelineData(blocks, undefined)}
+            onConnectionLineUpdate={(lines) => updatePipelineData(undefined, lines)}
+            renderBlock={renderBlock}
+          />
+        </div>
+
+        {settingsSidebar}
+      </BoardWithExpandableSettings>
     </>
   )
 }

@@ -1,8 +1,8 @@
 import FlowBoard from '../FlowBoard'
-import { BlockData } from '../utils/BlockUtils'
+import { BlockContentData, BlockData } from '../utils/BlockUtils'
 import { ConnectionLineData } from '../utils/ConnectionUtils'
 import { ToolBlockDefinition } from '../toolbox/ToolBlock'
 
 export { FlowBoard }
-export type { BlockData, ConnectionLineData, ToolBlockDefinition }
+export type { BlockData, BlockContentData, ConnectionLineData, ToolBlockDefinition }
 
