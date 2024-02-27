@@ -10,9 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react-pipelines": "*",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-pipelines": "*",
+    "styled-components": "^6.1.8"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
