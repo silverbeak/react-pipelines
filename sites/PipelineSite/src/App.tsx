@@ -4,6 +4,7 @@ import './App.css'
 import { BlockData, ConnectionLineData, FlowBoard, ToolBlockDefinition } from 'react-pipelines'
 import { useEffect, useState } from 'react'
 import { BlockContentData } from '../../../packages/react-pipelines/dist/utils/BlockUtils'
+import { getPipelineData, getToolBlockDefinitions, setPipelineData } from './api/PipelineAPI'
 
 function App() {
   const [blockData, setBlockData] = useState<BlockData[]>()
@@ -11,15 +12,9 @@ function App() {
   const [toolBlockDefinitions, setToolBlockDefinitions] = useState<ToolBlockDefinition[]>()
 
   function updatePipelineData(newBlockData?: BlockData[], newConnectionLineData?: ConnectionLineData[]) {
-    fetch('http://localhost:8000/pipeline/1', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        blockData: newBlockData ?? blockData,
-        connectionLineData: newConnectionLineData ?? connectionLineData,
-      }),
+    setPipelineData({
+      blockData: newBlockData ?? blockData!,
+      connectionLineData: newConnectionLineData ?? connectionLineData!,
     })
 
     if (newBlockData) {
@@ -31,8 +26,8 @@ function App() {
     }
   }
 
-  const renderBlock = function(blockContentData: BlockContentData) {
-    switch(blockContentData.contentType) {
+  const renderBlock = function (blockContentData: BlockContentData) {
+    switch (blockContentData.contentType) {
       case 'Main Input':
         return [<div>Block with content type {blockContentData.contentType}</div>]
       case 'Pipeline Block':
@@ -45,29 +40,31 @@ function App() {
   }
 
   useEffect(() => {
-    fetch('http://localhost:8000/pipeline/1')
-      .then((response) => response.json())
-      .then((data) => {
-        const blockData = data.blockData as BlockData[]
-        blockData.forEach((block: BlockData) => {
-          const blockContentData: BlockContentData = {
-            id: block.id,
-            contentType: block.blockContentData.contentType,
-          } 
-          block.renderer = () => renderBlock(blockContentData)
-        })
+    async function arrangeToolbox() {
+      const toolBlockDefinitions = await getToolBlockDefinitions()
+      setToolBlockDefinitions(toolBlockDefinitions)
+    }
 
-        const connectionLineData = data.connectionLineData as ConnectionLineData[]
+    async function arrangeData() {
+      const pipelineData = await getPipelineData()
+      const blockData = pipelineData.blockData as BlockData[]
 
-        setBlockData(blockData)
-        setConnectionLineData(connectionLineData)
+      blockData.forEach((block: BlockData) => {
+        const blockContentData: BlockContentData = {
+          id: block.id,
+          contentType: block.blockContentData.contentType,
+        }
+        block.renderer = () => renderBlock(blockContentData)
       })
 
-    fetch('http://localhost:8000/toolbox')
-      .then((response) => response.json())
-      .then((data) => {
-        setToolBlockDefinitions(data)
-      })
+      const connectionLineData = pipelineData.connectionLineData as ConnectionLineData[]
+
+      setBlockData(blockData)
+      setConnectionLineData(connectionLineData)
+    }
+
+    arrangeData()
+    arrangeToolbox()
   }, [])
 
   if (!blockData) {
