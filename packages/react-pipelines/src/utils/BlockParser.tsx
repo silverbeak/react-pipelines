@@ -25,25 +25,25 @@ function parseBlockData(
   switch (input.blockType) {
     case 'start':
       return (
-        <StartBlock {...input} {...connectionLinesProps} {...dragBlockProps}>
+        <StartBlock {...input} {...connectionLinesProps} {...dragBlockProps} key={input.id}>
           {input.renderer && input.renderer()}
         </StartBlock>
       )
     case 'mid':
       return (
-        <MidBlock {...input} {...connectionLinesProps}>
+        <MidBlock {...input} {...connectionLinesProps} key={input.id}>
           {input.renderer && input.renderer()}
         </MidBlock>
       )
     case 'end':
       return (
-        <EndBlock {...input} {...connectionLinesProps} {...dragBlockProps}>
+        <EndBlock {...input} {...connectionLinesProps} {...dragBlockProps} key={input.id}>
           {input.renderer && input.renderer()}
         </EndBlock>
       )
 
     default:
-      return <BaseBlock {...input}>{input.renderer && input.renderer()}</BaseBlock>
+      return <BaseBlock {...input} key={input.id}>{input.renderer && input.renderer()}</BaseBlock>
   }
 }
 

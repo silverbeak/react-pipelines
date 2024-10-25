@@ -69,7 +69,7 @@ export const DefaultBlock = function (props: BlockProps) {
     )
 
   return (
-    <StandardBlock>
+    <StandardBlock key={props.blockContentData.id}>
       {props.blockContentData.contentType}
 
       {/* In the top-right corner, add a cogwheel icon */}
