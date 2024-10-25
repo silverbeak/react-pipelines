@@ -29,8 +29,7 @@ const Board = styled.div`
   height: 90vh;
 `
 
-const FlowBoard = (props: FlowBoardProps) => {
-  const [blockData, setBlockData] = useState<BlockData[]>(props.blockData)
+const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
   const [boundaryRect, setBoundaryRect] = useState<{ x: number; y: number } | null>(null)
 
   const {
@@ -67,7 +66,7 @@ const FlowBoard = (props: FlowBoardProps) => {
 
       const newBlockId = Math.random().toString(36).substring(7)
 
-      
+
       const blockContentData = {
         id: newBlockId,
         contentType: contentType,
@@ -86,32 +85,26 @@ const FlowBoard = (props: FlowBoardProps) => {
         },
       }
 
-      setBlockData((blocks) => {
-        const newBlocks = [...blocks, newBlock]
-        props.onBlockUpdate(newBlocks)
-        return newBlocks
-      })
+      const newBlocks = [...blockData, newBlock]
+      props.onBlockUpdate(newBlocks)
     } else {
       const originalX = event.dataTransfer.getData('originX')
       const originalY = event.dataTransfer.getData('originY')
-      setBlockData((blocks) => {
-        const newBlocks = blocks.map((block) => {
-          if (block.id === movedBlockId) {
-            const newX = event.clientX + parseInt(originalX)
-            const newY = event.clientY + parseInt(originalY)
-            return {
-              ...block,
-              transformData: {
-                translateX: newX,
-                translateY: newY,
-              },
-            }
+      const newBlocks = blockData.map((block) => {
+        if (block.id === movedBlockId) {
+          const newX = event.clientX + parseInt(originalX)
+          const newY = event.clientY + parseInt(originalY)
+          return {
+            ...block,
+            transformData: {
+              translateX: newX,
+              translateY: newY,
+            },
           }
-          return block
-        })
-        props.onBlockUpdate(newBlocks)
-        return newBlocks
+        }
+        return block
       })
+      props.onBlockUpdate(newBlocks)
     }
   }
 
@@ -125,8 +118,8 @@ const FlowBoard = (props: FlowBoardProps) => {
         onConnectionLineDrop: onInputConnectionLineDrop,
       },
       {
-        onDragBlockStart: () => {},
-        onDragBlockEnd: () => {},
+        onDragBlockStart: () => { },
+        onDragBlockEnd: () => { },
       },
     ),
   )
