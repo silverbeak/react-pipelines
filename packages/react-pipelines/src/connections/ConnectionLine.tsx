@@ -19,7 +19,7 @@ const StyledSvgContainer = styled.svg`
 
 const StyledSvgLine = styled.line`
   position: absolute;
-  stroke-width: 2px;
+  strokeWidth: 2px;
   &:hover {
     stroke: red;
   }
@@ -27,7 +27,7 @@ const StyledSvgLine = styled.line`
 
 // const StyledSvgPath = styled.path`
 //   position: absolute;
-//   stroke-width: 2px;
+//   strokeWidth: 2px;
 //   &:hover {
 //     stroke: red;
 //   }
