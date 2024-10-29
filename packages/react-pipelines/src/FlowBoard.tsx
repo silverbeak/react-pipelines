@@ -2,12 +2,12 @@ import styled from 'styled-components'
 import { BlockContentData, BlockData } from './utils/BlockUtils'
 import { ConnectionCanvas } from './connections/ConnectionLine'
 import useConnectionDrag from './hooks/useConnectionDrag'
-import { useState } from 'react'
 import { ConnectionLineData } from './utils/ConnectionUtils'
 import useConnectionDraw from './hooks/useConnectionDraw'
 import Toolbox from './toolbox/Toolbox'
 import { parseBlockData } from './utils/BlockParser'
 import { ToolBlockDefinition } from './toolbox/ToolBlock'
+import React from 'react'
 
 interface FlowBoardProps {
   id: string
@@ -30,7 +30,7 @@ const Board = styled.div`
 `
 
 const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
-  const [boundaryRect, setBoundaryRect] = useState<{ x: number; y: number } | null>(null)
+  const mainBoardRef = React.useRef<HTMLDivElement | null>(null)
 
   const {
     connectionLinesData,
@@ -41,8 +41,8 @@ const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
   } = useConnectionDrag(
     blockData,
     props.connectionLineData,
-    boundaryRect?.x || 0,
-    boundaryRect?.y || 0,
+    mainBoardRef.current?.getBoundingClientRect()?.x || 0,
+    mainBoardRef.current?.getBoundingClientRect()?.y || 0,
     props.onConnectionLineUpdate,
   )
 
@@ -80,8 +80,8 @@ const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
         blockContentData,
         renderer: () => props.renderBlock(blockContentData), //renderChild(blockContentData),
         transformData: {
-          translateX: event.clientX - boundaryRect!.x - scrollX,
-          translateY: event.clientY - boundaryRect!.y - scrollY,
+          translateX: event.clientX - (mainBoardRef.current?.getBoundingClientRect()?.x || 0) - scrollX,
+          translateY: event.clientY - (mainBoardRef.current?.getBoundingClientRect()?.y || 0) - scrollY,
         },
       }
 
@@ -133,14 +133,7 @@ const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
         className="flow-board"
         onDragOver={dragBlock}
         onDrop={dropBlock}
-        ref={(el) => {
-          if (!!el && !boundaryRect) {
-            const rect = el.getBoundingClientRect()
-            const x = rect.left
-            const y = rect.top
-            setBoundaryRect({ x, y })
-          }
-        }}
+        ref={el => mainBoardRef.current = el}
       >
         {blocks}
         <ConnectionCanvas key="connection-canvas" lines={svgConnectionLines} />

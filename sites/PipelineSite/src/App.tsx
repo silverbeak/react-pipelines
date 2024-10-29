@@ -67,15 +67,15 @@ function App() {
   }, [])
 
   if (!blockData) {
-    return <div>Loading...</div>
+    return <div>Loading... (block data)</div>
   }
 
   if (!connectionLineData) {
-    return <div>Loading...</div>
+    return <div>Loading... (connection line data)</div>
   }
 
   if (!toolBlockDefinitions) {
-    return <div>Loading...</div>
+    return <div>Loading... (tool block definitions)</div>
   }
 
   const BoardWithExpandableSettings = styled.div`
