@@ -4,18 +4,20 @@ export interface ToolBlockDefinition {
   name: string
   blockType: 'start' | 'mid' | 'end'
   contentType: string
+  icon?: string
 }
 
 export interface ToolBlockProps {
   key: string
   tool: ToolBlockDefinition
+  children?: React.ReactNode
 }
 
 const Tool = styled.div`
   display: flex;
   flex-direction: row;
   margin: 5px;
-  padding: 10px;
+  padding: 0 5px 10px 5px;
   border: 1px solid #eee;
   border-radius: 3px;
 `
@@ -37,7 +39,7 @@ const ToolBlock = ({ tool, ...props }: ToolBlockProps) => {
         console.log('Dragend for', tool.blockType, 'event', event)
       }}
     >
-      {tool.contentType}
+      {props.children}
     </Tool>
   )
 }

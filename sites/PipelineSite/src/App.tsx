@@ -6,6 +6,7 @@ import { getPipelineData, getToolBlockDefinitions, setPipelineData } from './api
 import { renderBlock } from './renderers/DefaultBlockRenderer'
 import { SettingsSidebar } from './components/SettingsSidebar'
 import { OpenSettingsModalEvent } from './renderers/DefaultBlock'
+import { renderTool } from './renderers/DefaultToolRenderer'
 
 function App() {
   const [blockData, setBlockData] = useState<BlockData[]>()
@@ -95,6 +96,7 @@ function App() {
             onBlockUpdate={(blocks) => updatePipelineData(blocks, undefined)}
             onConnectionLineUpdate={(lines) => updatePipelineData(undefined, lines)}
             renderBlock={renderBlock}
+            renderTool={renderTool}
           />
         </div>
 

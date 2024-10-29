@@ -17,6 +17,7 @@ interface FlowBoardProps {
   onConnectionLineUpdate: (connectionLineData: ConnectionLineData[]) => void
   onBlockUpdate: (blockData: BlockData[]) => void
   renderBlock: (blockContentData: BlockContentData) => JSX.Element[]
+  renderTool: (toolBlockDefinition: ToolBlockDefinition) => JSX.Element[]
   showToolbox: boolean
 }
 
@@ -126,7 +127,7 @@ const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
 
   return (
     <div>
-      {props.showToolbox && <Toolbox toolblocks={props.toolBlockDefinitions} />}
+      {props.showToolbox && <Toolbox toolblocks={props.toolBlockDefinitions} renderer={props.renderTool} />}
 
       <Board
         id={props.id}
