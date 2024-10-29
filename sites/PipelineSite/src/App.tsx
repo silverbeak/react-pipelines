@@ -5,7 +5,6 @@ import { BlockContentData } from '../../../packages/react-pipelines/dist/utils/B
 import { getPipelineData, getToolBlockDefinitions, setPipelineData } from './api/PipelineAPI'
 import { renderBlock } from './renderers/DefaultBlockRenderer'
 import { SettingsSidebar } from './components/SettingsSidebar'
-import styled from 'styled-components'
 import { OpenSettingsModalEvent } from './renderers/DefaultBlock'
 
 function App() {
@@ -78,16 +77,9 @@ function App() {
     return <div>Loading... (tool block definitions)</div>
   }
 
-  const BoardWithExpandableSettings = styled.div`
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-    width: 100%;
-  `
-
   return (
     <>
-      <BoardWithExpandableSettings>
+      <div style={{ display: 'flex', flexDirection: 'row', height: '100%', width: '100%'}}>
         <div
           style={{
             flex: '1',
@@ -107,7 +99,7 @@ function App() {
         </div>
 
         {settingsSidebar}
-      </BoardWithExpandableSettings>
+      </div>
     </>
   )
 }
