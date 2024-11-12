@@ -27,7 +27,7 @@ const Board = styled.div`
   background-color: #151515;
   background-image: radial-gradient(rgba(105, 105, 105, 1) 1px, transparent 1px);
   width: 90vw;
-  height: 90vh;
+  height: 100%;
 `
 
 const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
@@ -126,19 +126,39 @@ const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
   )
 
   return (
-    <div>
-      {props.showToolbox && <Toolbox toolblocks={props.toolBlockDefinitions} renderer={props.renderTool} />}
+    <div style={{
+      display: 'flex',
+      flexDirection: 'row',
+      height: '100%',
+      width: '100%',
+      minHeight: 0,
+    }}>
+      <div style={{
+        flex: '1',
+        overflowY: 'scroll',
+        height: '95%',
+        overflow: 'scroll',
+        minHeight: 0,
+      }}>
+        {props.showToolbox && <Toolbox toolblocks={props.toolBlockDefinitions} renderer={props.renderTool} />}
+      </div>
+      <div style={{
+        flex: '5',
+        overflow: 'hidden',
+        height: '95%',
+      }}>
+        <Board
+          id={props.id}
+          className="flow-board"
+          onDragOver={dragBlock}
+          onDrop={dropBlock}
+          ref={el => mainBoardRef.current = el}
+        >
+          {blocks}
+          <ConnectionCanvas key="connection-canvas" lines={svgConnectionLines} />
+        </Board>
+      </div>
 
-      <Board
-        id={props.id}
-        className="flow-board"
-        onDragOver={dragBlock}
-        onDrop={dropBlock}
-        ref={el => mainBoardRef.current = el}
-      >
-        {blocks}
-        <ConnectionCanvas key="connection-canvas" lines={svgConnectionLines} />
-      </Board>
     </div>
   )
 }

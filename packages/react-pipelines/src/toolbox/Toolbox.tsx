@@ -8,11 +8,12 @@ interface ToolboxProps {
 
 const ToolSection = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   margin: 5px;
   padding: 3px;
   border: 1px solid #eee;
   border-radius: 3px;
+  scrollbar-width: thin;
 `
 
 const Toolbox = (props: ToolboxProps) => {

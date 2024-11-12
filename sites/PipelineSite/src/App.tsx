@@ -79,8 +79,7 @@ function App() {
   }
 
   return (
-    <>
-      <div style={{ display: 'flex', flexDirection: 'row', height: '100%', width: '100%'}}>
+      <div style={{ display: 'flex', flexDirection: 'row', height: '100vh', width: '95vw', minHeight: 0, minWidth: 0 }}>
         <div
           style={{
             flex: '1',
@@ -102,7 +101,6 @@ function App() {
 
         {settingsSidebar}
       </div>
-    </>
   )
 }
 
