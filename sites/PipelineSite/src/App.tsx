@@ -1,5 +1,5 @@
 import './App.css'
-import { BlockData, ConnectionLineData, FlowBoard, ToolBlockDefinition } from 'react-pipelines'
+import { BlockData, ConnectionLineData, FlowBoard, ToolBlockDefinition } from '@trollmoj/react-pipelines'
 import { useEffect, useState } from 'react'
 import { BlockContentData } from '../../../packages/react-pipelines/dist/utils/BlockUtils'
 import { getPipelineData, getToolBlockDefinitions, setPipelineData } from './api/PipelineAPI'

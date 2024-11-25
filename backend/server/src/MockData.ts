@@ -1,5 +1,5 @@
-import { ToolBlockDefinition } from 'react-pipelines'
-import { BlockData, ConnectionLineData } from 'react-pipelines'
+import { ToolBlockDefinition } from '@trollmoj/react-pipelines'
+import { BlockData, ConnectionLineData } from '@trollmoj/react-pipelines'
 
 const initialBlockData: BlockData[] = [
   {

@@ -16,7 +16,7 @@
     "build": "tsc -p ."
   },
   "dependencies": {
-    "react-pipelines": "*",
+    "@trollmoj/react-pipelines": "*",
     "cors": "^2.8.5",
     "express": "^4.18.2"
   }

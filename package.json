@@ -6,15 +6,13 @@
   "author": "Kristofer Jarl <kristofer.jarl@trollmoj.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently \"yarn workspace react-pipelines build --watch\" \"yarn workspace pipelinesite vite\""
+    "dev": "concurrently \"yarn workspace @trollmoj/react-pipelines build --watch\" \"yarn workspace pipelinesite vite\""
   },
-  "workspaces": {
-    "packages": [
-      "packages/*",
-      "sites/*",
-      "backend/*"
-    ]
-  },
+  "workspaces": [
+    "packages/*",
+    "sites/*",
+    "backend/*"
+  ],
   "devDependencies": {
     "concurrently": "^8.2.2"
   }
