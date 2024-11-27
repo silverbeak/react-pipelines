@@ -39,6 +39,8 @@ const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
     onOutputConnectionPointDrag,
     onOutputConnectionPointDragEnd,
     onInputConnectionLineDrop,
+    removeConnectionLine,
+    onConnectionLineClick,
   } = useConnectionDrag(
     blockData,
     props.connectionLineData,
@@ -117,6 +119,7 @@ const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
         onConnectionLineDrag: onOutputConnectionPointDrag,
         onConnectionLineDragEnd: onOutputConnectionPointDragEnd,
         onConnectionLineDrop: onInputConnectionLineDrop,
+        removeConnectionLine,
       },
       {
         onDragBlockStart: () => { },
@@ -155,7 +158,7 @@ const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
           ref={el => mainBoardRef.current = el}
         >
           {blocks}
-          <ConnectionCanvas key="connection-canvas" lines={svgConnectionLines} />
+          <ConnectionCanvas key="connection-canvas" lines={svgConnectionLines} onConnectionLineClick={onConnectionLineClick}/>
         </Board>
       </div>
 
