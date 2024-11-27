@@ -1,4 +1,4 @@
-import { BlockData, ConnectionLineData } from "react-pipelines"
+import { BlockData, ConnectionLineData } from "@trollmoj/react-pipelines"
 
 type PipelineData = {
   id: string
