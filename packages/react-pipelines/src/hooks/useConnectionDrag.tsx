@@ -54,11 +54,11 @@ const useConnectionDrag = (
     setConnectionLines((lines) => lines.filter((line) => line.key !== 'xxx'))
     setCurrentConnectionLine(null)
     const newConnectionLines = connectionLinesData.filter((line) => line.key !== 'xxx')
-    // if (newConnectionLines.length === connectionLinesData.length) {
+    if (newConnectionLines.length === connectionLinesData.length) {
       onConnectionLineUpdate(newConnectionLines as ConnectionLineData[])
-    // } else {
+    } else {
       console.log('Not saving connection lines', newConnectionLines)
-    // }
+    }
   }
 
   const onInputConnectionLineDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -94,7 +94,6 @@ const useConnectionDrag = (
   }
 
   useEffect(() => {
-    console.log('Selected connection line:', selectedConnectionLine)
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Backspace' && selectedConnectionLine) {
         removeConnectionLine(selectedConnectionLine)

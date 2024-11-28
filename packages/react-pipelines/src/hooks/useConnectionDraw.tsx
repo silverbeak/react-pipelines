@@ -106,6 +106,11 @@ const useConnectionDraw = (
       (connectionLine) => connectionLine.key === 'xxx',
     ) as TemporaryConnectionLineData[]
 
+    const currentKeys = connectionLineData.map((line) => line.key);
+    setSvgConnectionLines((lines) =>
+      lines.filter((line) => currentKeys.includes(line.key))
+    );
+
     savedConnectionLines.forEach((connectionLine) => drawConnectionLine(connectionLine, calculatePosition, blockData))
     tempConnectionLines.forEach((connectionLine) =>
       drawTempConnectionLine(connectionLine, calculatePosition, blockData),
