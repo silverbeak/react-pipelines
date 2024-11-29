@@ -1,27 +1,9 @@
-# React + TypeScript + Vite
+# React Pipelines
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+While the name may not be 100% accurate, React Pipelines is a React Component that can be injected into your application to provide a canvas on which a user can display/control a simple work flow or pipeline.
 
-Currently, two official plugins are available:
+Essentially, it is a visual representation of a pipeline that can be controlled by the user. The user can add, remove, and connect "blocks" to create a pipeline.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A lot of the functionality is still in development, but the basic graphical elements are here, to show how the tool may be used in the future.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+This README will be updated as the project progresses.
