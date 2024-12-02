@@ -7,7 +7,7 @@ import {
   InputConnectionPoint,
   OutputConnectionPoint,
 } from '../connections/ConnectionPoint'
-import { DragConnectionLineProps } from '../utils/BlockParser'
+import { DragConnectionLineProps, ConnectionPointProps } from '../utils/BlockParser'
 import { TransformData } from '../utils/BlockUtils'
 
 interface MidBlockProps {
@@ -17,7 +17,7 @@ interface MidBlockProps {
   transformData: TransformData
 }
 
-const MidBlock = (props: MidBlockProps & DragConnectionLineProps) => {
+const MidBlock = (props: MidBlockProps & DragConnectionLineProps & ConnectionPointProps) => {
   const { transformData, onDragStart, onDragEnd } = usePipelineDrag(
     props.transformData.translateX,
     props.transformData.translateY,
@@ -38,6 +38,7 @@ const MidBlock = (props: MidBlockProps & DragConnectionLineProps) => {
         onDragStart={props.onConnectionLineDragStart}
         onDrag={props.onConnectionLineDrag}
         onDragEnd={props.onConnectionLineDragEnd}
+        onContextMenu= {(event) => props.onConnectionPointRightClick(`${props.id}-output`, event)}
       />
       <ErrorOutputConnectionPoint
         id={`${props.id}-erroroutput`}
@@ -45,6 +46,7 @@ const MidBlock = (props: MidBlockProps & DragConnectionLineProps) => {
         onDragStart={props.onConnectionLineDragStart}
         onDrag={props.onConnectionLineDrag}
         onDragEnd={props.onConnectionLineDragEnd}
+        onContextMenu= {(event) => props.onConnectionPointRightClick(`${props.id}-erroroutput`, event)}
       />
       <InputConnectionPoint onDrop={props.onConnectionLineDrop} id={`${props.id}-input`} />
       <ErrorInputConnectionPoint 

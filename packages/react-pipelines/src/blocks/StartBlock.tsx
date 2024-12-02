@@ -2,7 +2,7 @@ import React from 'react'
 import BaseBlock from './BaseBlock'
 import { usePipelineDrag } from '../hooks/usePipelineDrag'
 import { ErrorOutputConnectionPoint, OutputConnectionPoint } from '../connections/ConnectionPoint'
-import { DragBlockProps, DragConnectionLineProps } from '../utils/BlockParser'
+import { DragBlockProps, DragConnectionLineProps, ConnectionPointProps } from '../utils/BlockParser'
 import { TransformData } from '../utils/BlockUtils'
 
 interface StartBlockProps {
@@ -12,7 +12,7 @@ interface StartBlockProps {
   transformData: TransformData
 }
 
-const StartBlock = (props: StartBlockProps & DragConnectionLineProps & DragBlockProps) => {
+const StartBlock = (props: StartBlockProps & DragConnectionLineProps & DragBlockProps & ConnectionPointProps) => {
   const { transformData, onDragStart, onDragEnd } = usePipelineDrag(
     props.transformData.translateX,
     props.transformData.translateY,
@@ -33,6 +33,7 @@ const StartBlock = (props: StartBlockProps & DragConnectionLineProps & DragBlock
         onDragStart={props.onConnectionLineDragStart}
         onDrag={props.onConnectionLineDrag}
         onDragEnd={props.onConnectionLineDragEnd}
+        onContextMenu= {(event) => props.onConnectionPointRightClick(`${props.id}-output`, event)}
       />
       <ErrorOutputConnectionPoint 
         id={`${props.id}-erroroutput`} 
@@ -40,6 +41,7 @@ const StartBlock = (props: StartBlockProps & DragConnectionLineProps & DragBlock
         onDragStart={props.onConnectionLineDragStart}
         onDrag={props.onConnectionLineDrag}
         onDragEnd={props.onConnectionLineDragEnd}
+        onContextMenu= {(event) => props.onConnectionPointRightClick(`${props.id}-erroroutput`, event)}
       />
       {props.children}
     </BaseBlock>

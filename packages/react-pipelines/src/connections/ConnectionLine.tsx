@@ -3,6 +3,7 @@ import styled from 'styled-components'
 interface ConnectionContainerProps {
   key: string
   lines: ConnectionSvgLineProps[]
+  onLineRightClick: (lineKey: string, event: React.MouseEvent) => void;
 }
 
 const StyledSvgContainer = styled.svg`
@@ -19,10 +20,12 @@ const StyledSvgContainer = styled.svg`
 
 const StyledSvgLine = styled.line`
   position: absolute;
-  strokeWidth: 2px;
+  stroke-width: 2px;
+  transition: stroke-width 0.2s ease;
   &:hover {
     stroke: red;
-  }
+    stroke-width: 6px;
+    cursor: pointer;
 `
 
 // const StyledSvgPath = styled.path`
@@ -55,6 +58,7 @@ const ConnectionCanvas = (props: ConnectionContainerProps) => {
           y2={line.y2}
           stroke="steelblue"
           strokeWidth="2"
+          onContextMenu={(event) => props.onLineRightClick(line.key, event)}
           // markerEnd="url(#arrowhead)"
         />
       ))}

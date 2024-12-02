@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BlockData } from '../utils/BlockUtils'
 import { ConnectionLineData, TemporaryConnectionLineData } from '../utils/ConnectionUtils'
 
@@ -11,6 +11,10 @@ const useConnectionDrag = (
 ) => {
   const [connectionLinesData, setConnectionLines] = useState<(ConnectionLineData | TemporaryConnectionLineData)[]>(connectionLineData)
   const [currentConnectionLine, setCurrentConnectionLine] = useState<TemporaryConnectionLineData | null>(null)
+
+  useEffect(() => {
+    setConnectionLines(connectionLineData);
+  }, [connectionLineData]);
 
   const onOutputConnectionPointDragStart = (event: React.DragEvent<HTMLDivElement>) => {
     event.stopPropagation()

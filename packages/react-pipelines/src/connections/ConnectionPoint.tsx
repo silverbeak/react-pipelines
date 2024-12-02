@@ -6,33 +6,42 @@ const styledConnectionPoint = styled.div`
   height: 15px;
   background: white;
   border-radius: 50%;
-  cursor: crosshair;
+  cursor: grab;
   border: 1px solid black;
   z-index: 10;
   margin-bottom: 5px;
+
+  &:hover {
+  border-color: lightblue;
+  }
+
+  &:active {
+  cursor: grabbing;
+  border-color: lightblue;
+  }
 `
 
 const styledInputConnectionPoint = styled(styledConnectionPoint)`
   left: -10px;
-  top: 20px;
+  top: 40px;
   background: green;
 `
 
 const styledErrorInputConnectionPoint = styled(styledConnectionPoint)`
   left: -10px;
-  top: 50px;
+  top: 70px;
   background: red;
 `
 
 const styledOutputConnectionPoint = styled(styledConnectionPoint)`
 right: -10px;
-top: 20px;
+top: 40px;
 background: green;
 `
 
 const styledErrorOutputConnectionPoint = styled(styledConnectionPoint)`
   right: -10px;
-  top: 50px;
+  top: 70px;
   background: red;
 `
 

@@ -8,6 +8,7 @@ import Toolbox from './toolbox/Toolbox'
 import { parseBlockData } from './utils/BlockParser'
 import { ToolBlockDefinition } from './toolbox/ToolBlock'
 import React from 'react'
+import useConnectionRightClick from './hooks/useConnectionClick'
 
 interface FlowBoardProps {
   id: string
@@ -48,6 +49,14 @@ const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
   )
 
   const { svgConnectionLines } = useConnectionDraw(connectionLinesData, blockData)
+
+  const {
+    handleConnectionLineRightClick,
+    handleOutputConnectionPointRightClick,
+  } = useConnectionRightClick(
+    props.connectionLineData,
+    props.onConnectionLineUpdate
+  )
 
   const dragBlock = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
@@ -122,6 +131,9 @@ const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
         onDragBlockStart: () => { },
         onDragBlockEnd: () => { },
       },
+      {
+        onConnectionPointRightClick: handleOutputConnectionPointRightClick
+      },
     ),
   )
 
@@ -155,7 +167,7 @@ const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
           ref={el => mainBoardRef.current = el}
         >
           {blocks}
-          <ConnectionCanvas key="connection-canvas" lines={svgConnectionLines} />
+          <ConnectionCanvas key="connection-canvas" lines={svgConnectionLines} onLineRightClick={handleConnectionLineRightClick}/>
         </Board>
       </div>
 
