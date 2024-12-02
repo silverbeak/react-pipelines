@@ -21,11 +21,8 @@ const StyledSvgContainer = styled.svg`
 const StyledSvgLine = styled.line`
   position: absolute;
   stroke-width: 2px;
-  transition: stroke-width 0.2s ease;
   &:hover {
     stroke: red;
-    stroke-width: 6px;
-    cursor: pointer;
 `
 
 // const StyledSvgPath = styled.path`

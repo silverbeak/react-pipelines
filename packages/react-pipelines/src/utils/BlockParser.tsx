@@ -17,26 +17,21 @@ export interface DragBlockProps {
   onDragBlockEnd: (event: React.DragEvent<HTMLDivElement>) => void
 }
 
-export interface ConnectionPointProps {
-  onConnectionPointRightClick: (lineKey: string, event: React.MouseEvent) => void;
-}
-
 function parseBlockData(
   input: BlockData,
   connectionLinesProps: DragConnectionLineProps,
   dragBlockProps: DragBlockProps,
-  connectionPointProps: ConnectionPointProps
 ): React.ReactElement {
   switch (input.blockType) {
     case 'start':
       return (
-        <StartBlock {...input} {...connectionLinesProps} {...dragBlockProps} {...connectionPointProps} key={input.id}>
+        <StartBlock {...input} {...connectionLinesProps} {...dragBlockProps} key={input.id}>
           {input.renderer && input.renderer()}
         </StartBlock>
       )
     case 'mid':
       return (
-        <MidBlock {...input} {...connectionLinesProps} {...connectionPointProps} key={input.id}>
+        <MidBlock {...input} {...connectionLinesProps} key={input.id}>
           {input.renderer && input.renderer()}
         </MidBlock>
       )

@@ -52,7 +52,6 @@ const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
 
   const {
     handleConnectionLineRightClick,
-    handleOutputConnectionPointRightClick,
   } = useConnectionRightClick(
     props.connectionLineData,
     props.onConnectionLineUpdate
@@ -130,9 +129,6 @@ const FlowBoard = ({ blockData, ...props }: FlowBoardProps) => {
       {
         onDragBlockStart: () => { },
         onDragBlockEnd: () => { },
-      },
-      {
-        onConnectionPointRightClick: handleOutputConnectionPointRightClick
       },
     ),
   )

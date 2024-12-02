@@ -11,10 +11,6 @@ const styledConnectionPoint = styled.div`
   z-index: 10;
   margin-bottom: 5px;
 
-  &:hover {
-  border-color: lightblue;
-  }
-
   &:active {
   cursor: grabbing;
   border-color: lightblue;
