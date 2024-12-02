@@ -23,6 +23,7 @@ const StyledSvgLine = styled.line`
   stroke-width: 2px;
   &:hover {
     stroke: red;
+  }
 `
 
 // const StyledSvgPath = styled.path`
