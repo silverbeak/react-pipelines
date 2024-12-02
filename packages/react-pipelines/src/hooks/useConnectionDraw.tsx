@@ -97,7 +97,10 @@ const useConnectionDraw = (
     [],
   )
 
-  useEffect(() => {
+  useEffect(() => {    
+    
+    setSvgConnectionLines([]);
+
     const savedConnectionLines: ConnectionLineData[] = connectionLineData.filter(
       (connectionLine) => connectionLine.key !== 'xxx',
     ) as ConnectionLineData[]
@@ -106,12 +109,15 @@ const useConnectionDraw = (
       (connectionLine) => connectionLine.key === 'xxx',
     ) as TemporaryConnectionLineData[]
 
-    savedConnectionLines.forEach((connectionLine) => drawConnectionLine(connectionLine, calculatePosition, blockData))
+    savedConnectionLines.forEach((connectionLine) =>
+        drawConnectionLine(connectionLine, calculatePosition, blockData),
+      );
+
     tempConnectionLines.forEach((connectionLine) =>
       drawTempConnectionLine(connectionLine, calculatePosition, blockData),
     )
   }, [connectionLineData, blockData, drawConnectionLine, drawTempConnectionLine])
-
+ 
   return { svgConnectionLines }
 }
 
