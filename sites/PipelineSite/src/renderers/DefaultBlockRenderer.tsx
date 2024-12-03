@@ -1,4 +1,4 @@
-import { BlockContentData } from 'react-pipelines'
+import { BlockContentData } from '@trollmoj/react-pipelines'
 import { DefaultBlock } from './DefaultBlock'
 
 export const renderBlock = function (blockContentData: BlockContentData) {

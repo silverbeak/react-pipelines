@@ -9,7 +9,7 @@ export interface DragConnectionLineProps {
   onConnectionLineDragStart: (event: React.DragEvent<HTMLDivElement>) => void
   onConnectionLineDrag: (event: React.DragEvent<HTMLDivElement>) => void
   onConnectionLineDragEnd: (event: React.DragEvent<HTMLDivElement>) => void
-  onConnectionLineDrop: (event: React.DragEvent<HTMLDivElement>) => void,
+  onConnectionLineDrop: (event: React.DragEvent<HTMLDivElement>) => void
   removeConnectionLine: (key: string) => void
 }
 
