@@ -3,6 +3,7 @@ import styled from 'styled-components'
 interface ConnectionContainerProps {
   key: string
   lines: ConnectionSvgLineProps[]
+  onConnectionLineClick: (key: string) => void
 }
 
 const StyledSvgContainer = styled.svg`
@@ -34,7 +35,7 @@ const StyledSvgLine = styled.line`
 // `
 
 interface ConnectionSvgLineProps extends React.SVGProps<SVGLineElement> {
-  key: string
+  key: string,
 }
 
 const ConnectionCanvas = (props: ConnectionContainerProps) => {
@@ -56,6 +57,7 @@ const ConnectionCanvas = (props: ConnectionContainerProps) => {
           stroke="steelblue"
           strokeWidth="2"
           // markerEnd="url(#arrowhead)"
+          onClick={() => props.onConnectionLineClick(line.key)}
         />
       ))}
 

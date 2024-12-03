@@ -1,4 +1,4 @@
-import { ToolBlockDefinition } from "react-pipelines"
+import { ToolBlockDefinition } from "@trollmoj/react-pipelines"
 
 function BlockBase(tool: ToolBlockDefinition): JSX.Element {
   return (

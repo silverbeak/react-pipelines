@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BlockData } from '../utils/BlockUtils'
 import { ConnectionLineData, TemporaryConnectionLineData } from '../utils/ConnectionUtils'
 
@@ -11,6 +11,7 @@ const useConnectionDrag = (
 ) => {
   const [connectionLinesData, setConnectionLines] = useState<(ConnectionLineData | TemporaryConnectionLineData)[]>(connectionLineData)
   const [currentConnectionLine, setCurrentConnectionLine] = useState<TemporaryConnectionLineData | null>(null)
+  const [selectedConnectionLine, setSelectedConnectionLine] = useState<string | null>(null)
 
   const onOutputConnectionPointDragStart = (event: React.DragEvent<HTMLDivElement>) => {
     event.stopPropagation()
@@ -82,13 +83,40 @@ const useConnectionDrag = (
     })
   }
 
+  const removeConnectionLine = (key: string) => {
+    const updatedLines = connectionLinesData.filter((line) => line.key !== key)
+    setConnectionLines(updatedLines)
+    onConnectionLineUpdate(updatedLines as ConnectionLineData[])
+  }
+
+  const onConnectionLineClick = (key: string) => {
+    setSelectedConnectionLine(key)
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Backspace' && selectedConnectionLine) {
+        removeConnectionLine(selectedConnectionLine)
+        setSelectedConnectionLine(null)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [selectedConnectionLine])
+
   return {
     connectionLinesData,
     onOutputConnectionPointDragStart,
     onOutputConnectionPointDrag,
     onOutputConnectionPointDragEnd,
     onInputConnectionLineDrop,
+    removeConnectionLine,
+    onConnectionLineClick,
   }
 }
 
 export default useConnectionDrag
+
