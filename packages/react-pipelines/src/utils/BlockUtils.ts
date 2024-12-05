@@ -1,7 +1,7 @@
 interface BlockContentData {
   id: string
   contentType: string
-  [key: string]: string | number | boolean | (() => JSX.Element[]) | string[] | undefined
+  [key: string]: string | number | boolean | (() => JSX.Element[]) | (string | Record<string, unknown>)[] | undefined
 }
 
 interface BlockData {
