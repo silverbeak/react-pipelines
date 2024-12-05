@@ -1,7 +1,7 @@
 interface BlockContentData {
   id: string
   contentType: string
-  [key: string]: string | number | boolean | (() => JSX.Element[]) | undefined
+  [key: string]: string | number | boolean | (() => JSX.Element[]) | string[] | undefined
 }
 
 interface BlockData {
@@ -10,7 +10,15 @@ interface BlockData {
   transformData: TransformData
   blockContentData: BlockContentData
   renderer?: () => JSX.Element[]
-  [key: string]: string | number | boolean | TransformData | BlockContentData | (() => JSX.Element[]) | undefined
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | TransformData
+    | BlockContentData
+    | (() => JSX.Element[])
+    | (string | Record<string, unknown>)[]
+    | undefined
 }
 
 interface TransformData {
