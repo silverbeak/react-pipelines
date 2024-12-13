@@ -2,7 +2,7 @@
   "name": "@trollmoj/react-pipelines",
   "description": "A React library for building pipelines on a grid",
   "private": false,
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "scripts": {
     "dev": "vite",
